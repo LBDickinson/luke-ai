@@ -27,7 +27,7 @@ st.markdown("""
 
     /* MANIFESTO DIALOG: MAXIMUM CONTRAST CHARCOAL */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
-        color: #333333 !important; /* High-contrast Charcoal */
+        color: #333333 !important;
         font-weight: 600;
     }
 
@@ -40,15 +40,27 @@ st.markdown("""
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        min-width: 300px !important; /* Reduced for better balance */
+        min-width: 300px !important;
     }
     [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
 
-    /* HIGH-VISIBILITY HELP ICON */
+    /* FORCE HELP ICON TO ICE BLUE */
     [data-testid="stWidgetLabel"] svg {
-        color: #FFFFFF !important;
-        filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8)) !important;
-        opacity: 1 !important;
+        fill: #A5D8FF !important;
+        color: #A5D8FF !important;
+    }
+    
+    /* BUTTON HOVER: WHY KLUE TURNS ICE BLUE */
+    div.stButton > button:first-child {
+        background-color: transparent;
+        border: 1px solid #555;
+        color: #F0F2F5;
+        transition: all 0.3s ease;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #A5D8FF !important;
+        border-color: #A5D8FF !important;
+        color: #131314 !important; /* Dark text on light blue hover */
     }
     
     /* LOGO */
