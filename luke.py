@@ -16,11 +16,14 @@ st.markdown("""
     [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
     
-    .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
-    
-    /* TITANIUM WHITE FORCE - Targeted to avoid button white-out */
+    /* BACKGROUND LOCKS */
+    .stApp { background-color: #131314 !important; }
+    [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
+
+    /* TITANIUM WHITE FORCE - Targeted to avoid container white-out */
     [data-testid="stSidebar"] .stMarkdown p, 
     [data-testid="stSidebar"] label,
+    [data-testid="stWidgetLabel"] p,
     div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
     }
@@ -37,7 +40,7 @@ st.markdown("""
         border: 1px solid #444 !important;
     }
 
-    /* BUTTONS - PREVENT WHITE OUT */
+    /* BUTTONS - PREVENT WHITE OUT & FORCE STYLE */
     div.stButton > button {
         background-color: transparent !important;
         border: 1px solid #444 !important;
@@ -78,6 +81,7 @@ st.markdown("""
 
     /* MANIFESTO TEXT COLOR FORCE (Inside Dialog) */
     .manifesto-text { color: #1E1E1E !important; }
+    .manifesto-text p, .manifesto-text h3, .manifesto-text b { color: #1E1E1E !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -91,27 +95,27 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Comprehensive Text Restored)
+# 4. MANIFESTO (Full Agreed Copy - Forced Contrast)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
     <div class="manifesto-text">
-    <h3 style="color: #1E1E1E;">Stop Guessing. Move with Certainty.</h3>
+    <h3>Stop Guessing. Move with Certainty.</h3>
     <p>In an era where AI is fast, cheap, and <b>risks mistakes</b>, KLUE is the Audit Layer for the Modern Enterprise.</p>
     <hr style="border-top: 1px solid #ccc;">
     <p><b>1. THE ENSEMBLE ARCHITECTURE</b></p>
     <p><b>KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.</b> Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.</p>
-    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px;">
+    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px; color: #1E1E1E;">
     <b>The Result:</b> You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get <b>THE answer.</b>
     </blockquote>
     <p><b>2. THE HALLUCINATION FIREWALL</b></p>
     <p>Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is <b>astronomically low.</b></p>
-    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px;">
+    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px; color: #1E1E1E;">
     <b>The Result:</b> This multi-core audit <b>dramatically reduces</b> your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
     </blockquote>
     <p><b>3. PRECISION OVER SPEED</b></p>
     <p>Speed is a commodity; Accuracy is a luxury. Think of standard AI as a <b>Calculator</b>—great for routine math and daily tasks. Think of KLUE as the <b>Auditor</b>—essential for the 20% of decisions that carry 80% of your business risk.</p> 
-    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px;">
+    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px; color: #1E1E1E;">
     <b>The Result:</b> We don't compete on milliseconds; we compete on the <b>integrity of the outcome.</b>
     </blockquote>
     </div>
