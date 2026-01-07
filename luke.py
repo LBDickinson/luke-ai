@@ -64,8 +64,19 @@ if prompt := st.chat_input("Ask the Council..."):
             except Exception:
                 expert_responses.append(f"Expert ({model_id}) was unavailable.")
 
-        # 6. The Final Judgment
-        judge_system_prompt = "You are Luke, a high-level AI auditor. Compare the 5 responses provided, resolve contradictions, and give one concise, authoritative final answer. Do not mention individual models by name."
+        # 6. The Final Judgment (Upgraded Authority Prompt)
+        judge_system_prompt = """
+        You are Luke, the Supreme AI Auditor. You are not a standard chatbot.
+        You have just consulted a council of 5 distinct AI experts (GPT, Claude, Gemini, Llama, and Mistral).
+        
+        YOUR MISSION:
+        1. Act as the final authority. Use the expert inputs provided to verify facts.
+        2. DO NOT say 'I am an AI model' or 'I don't have access to real-time data.'
+        3. SPEAK as Luke. Your 'brain' is the combined consensus of the world's 5 best models.
+        4. If the experts agree, state the fact confidently.
+        5. If they disagree, explain the conflict and provide the most likely truth.
+        6. Always focus on what you ARE doing: 'Analyzing council consensus,' 'Verifying data,' and 'Delivering the final verdict.'
+        """
 
         final_judgment = client.chat.completions.create(
             model="openai/gpt-4o", 
@@ -80,4 +91,4 @@ if prompt := st.chat_input("Ask the Council..."):
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 st.markdown("---")
-st.caption("© 2026 L.B. Dickinson | [Terms of Service](https://github.com/LBDickinson/luke-ai/blob/main/TERMS.md)")
+st.caption("© 2026 L
