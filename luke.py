@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. MASTER AESTHETIC ENGINE
+# 2. THE MASTER REPAIR ENGINE (Strictly for Titanium White and Bottom-Left Pinning)
 st.markdown("""
     <style>
     [data-testid="stDecoration"] {display: none;}
@@ -18,44 +18,40 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* UNIVERSAL TITANIUM WHITE FORCE - Target everything specifically */
-    .stApp p, .stApp label, .stApp span, .stApp div, [data-testid="stMarkdownContainer"] p {
+    /* 1. FORCE TITANIUM WHITE GLOBALLY */
+    .stApp p, .stApp label, .stApp span, [data-testid="stMarkdownContainer"] p, 
+    [data-testid="stWidgetLabel"] p, div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
     }
 
-    /* MANIFESTO DIALOG: MUST REMAIN DARK FOR READABILITY ON LIGHT MODAL */
-    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3, [data-testid="stDialog"] span {
+    /* 2. PIN ENGINE SELECTION TO BOTTOM LEFT */
+    /* This creates a fixed-position section at the bottom of the sidebar */
+    [data-testid="stSidebarUserContent"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 3. MANIFESTO DIALOG CONTRAST */
+    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
     }
 
-    /* ICE BLUE TINT FOR KLUE HUB ICON */
+    /* 4. ICE BLUE TINT FOR ICONS */
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
         color: #A5D8FF !important;
     }
-    
-    /* SIDEBAR: REMOVING HARD WIDTHS TO RESTORE NATIVE COLLAPSE/RESIZE */
-    [data-testid="stSidebar"] {
-        background-color: #1E1F20 !important;
-        border-right: 1px solid #333333;
-    }
-
-    /* PUSH ENGINE SELECTION TO BOTTOM WITHOUT BREAKING LAYOUT */
-    div[data-testid="stSidebarUserContent"] {
-        display: flex;
-        flex-direction: column;
-        height: 95vh;
-    }
-    .spacer {
-        flex-grow: 1;
-    }
-
-    /* FORCE HELP ICON TO ICE BLUE */
     [data-testid="stWidgetLabel"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
     }
     
-    /* BUTTON STYLING */
+    /* 5. SIDEBAR STYLE */
+    [data-testid="stSidebar"] {
+        background-color: #1E1F20 !important;
+        border-right: 1px solid #333333;
+    }
+    
+    /* 6. BUTTON HOVER */
     div.stButton > button {
         background-color: transparent;
         border: 1px solid #444;
@@ -68,7 +64,7 @@ st.markdown("""
         color: #131314 !important;
     }
     
-    /* LOGO */
+    /* 7. LOGO */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -79,7 +75,7 @@ st.markdown("""
         border: 2px solid #555; border-bottom-left-radius: 45px; 
     }
 
-    /* STATUS BOXES */
+    /* 8. STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -88,7 +84,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. SESSION STATE
+# 3. STATE
 if "messages" not in st.session_state: st.session_state.messages = []
 if "history" not in st.session_state: st.session_state.history = []
 
@@ -98,7 +94,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. PRO POP-UP WINDOW
+# 4. MANIFESTO
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -131,12 +127,14 @@ with st.sidebar:
             if st.button(item["title"], key=f"hist_{i}"):
                 st.session_state.messages = item["chat"]; st.rerun()
 
-    # The Spacer pushes the next elements to the bottom
-    st.markdown('<div class="spacer"></div>', unsafe_allow_html=True)
+    # FORCE BOTTOM POSITIONING
+    # We use empty markdown lines to push content down; it's the most stable way in Streamlit
+    for _ in range(15): st.sidebar.write("") 
     
     st.markdown("---")
     if st.button("📖 WHY KLUE?"): show_manifesto()
     
+    # RESTORED FULL DESCRIPTIONS
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
         "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
@@ -150,17 +148,17 @@ with st.sidebar:
     elif selected_mode == "Pro": st.markdown("<div class='status-base' style='box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important;'>4 CORES: DEEP</div>", unsafe_allow_html=True)
     else: st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER</div>", unsafe_allow_html=True)
 
-# 6. BRANDING & CLIENT
+# 6. BRANDING
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div></div>", unsafe_allow_html=True)
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
-# 7. CHAT DISPLAY
+# 7. DISPLAY
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
         st.markdown(msg["content"])
 
-# 8. EXECUTION
+# 8. RUN
 if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=":material/radio_button_checked:"):
