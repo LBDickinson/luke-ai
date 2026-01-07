@@ -4,29 +4,30 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Master Aesthetic + Visibility Fixes
+# 2. Master Aesthetic + Visibility Overrides
 st.markdown("""
     <style>
-    /* 1. HIDE DEFAULTS BUT REVEAL THE SIDEBAR TOGGLE */
+    /* 1. SEAMLESS HEADER & TOGGLE VISIBILITY */
     [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
 
-    /* 2. MAKE THE COLLAPSED SIDEBAR ARROW VISIBLE */
+    /* FORCE SIDEBAR ARROW TO BE BRIGHT WHITE & VISIBLE */
     button[data-testid="stBaseButton-headerNoPadding"] svg {
         fill: #FFFFFF !important;
         color: #FFFFFF !important;
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
+        filter: drop-shadow(0px 0px 3px rgba(255,255,255,0.5));
     }
 
-    /* 3. GLOBAL THEME (Gemini Charcoal) */
+    /* 2. GLOBAL THEME (Gemini Charcoal) */
     .stApp { 
         background-color: #131314; 
         color: #E3E3E3; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* SIDEBAR LEGIBILITY */
+    /* 3. SIDEBAR STYLING */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
@@ -38,24 +39,45 @@ st.markdown("""
 
     .block-container { max-width: 800px; padding-top: 2rem !important; }
 
-    /* LOGO: SHINING TITANIUM + ARCHITECTURAL CORNER */
+    /* 4. THE LOGO: ARCHITECTURAL SHIELD */
     .branding-container { text-align: center; margin-bottom: 50px; }
+    
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
-        padding: 12px 30px; 
+        padding: 15px 35px; 
+        
+        /* Shining Titanium Gradient */
         background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
         background-size: 200% auto;
         -webkit-background-clip: text; 
         -webkit-text-fill-color: transparent; 
-        border: 1px solid #555;
-        border-bottom-left-radius: 40px; 
-        animation: shine 6s linear infinite;
+        
+        /* The Shield Box: Architectural Asymmetry */
+        border: 2px solid #444;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 45px; 
+        
+        /* Depth Shadow */
+        filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6));
+        animation: shine 8s linear infinite;
     }
-    @keyframes shine { to { background-position: 200% center; } }
+    
+    @keyframes shine {
+        to { background-position: 200% center; }
+    }
 
-    .tagline { color: #888888; font-size: 0.8rem; letter-spacing: 10px; margin-top: 20px; text-transform: uppercase; font-weight: 300; }
+    .tagline { 
+        color: #888888; 
+        font-size: 0.8rem; 
+        letter-spacing: 10px; 
+        margin-top: 25px; 
+        text-transform: uppercase;
+        font-weight: 300;
+    }
 
-    /* MERGED INTELLIGENCE - ICE BLUE STATUS */
+    /* 5. ICE BLUE STATUS INDICATOR */
     .merged-status {
         color: #A5D8FF;
         border: 1px solid #A5D8FF;
@@ -68,7 +90,7 @@ st.markdown("""
         letter-spacing: 1px;
     }
 
-    /* INPUT PILL */
+    /* 6. INPUT PILL STYLING */
     .stChatInputContainer > div {
         background-color: #1E1F20 !important;
         border: 1px solid #3C4043 !important;
@@ -82,9 +104,10 @@ with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
     
     mode_help = (
-        "**Lite:** 2 Engines. Optimized for creative speed.\n\n"
-        "**Standard:** 4 Engines. Integrated cross-verification.\n\n"
-        "**Meta:** 5 Engines. The master synthesis for a definitive 'One-Shot' response."
+        "**Lite:** 2 Engines. Optimized for creative speed and brevity.\n\n"
+        "**Standard:** 4 Engines. Integrated cross-verification and logic merging.\n\n"
+        "**Meta:** 5 Engines. The master synthesis for a definitive 'One-Shot' response, "
+        "minimizing the need for corrections."
     )
     
     selected_mode = st.selectbox(
@@ -103,7 +126,7 @@ with st.sidebar:
     else: 
         st.warning("META: EXECUTIVE SYNTHESIS")
         
-    st.caption("KLUE v4.5 / THE MASTER SOURCE")
+    st.caption("KLUE v4.6 / THE MASTER SOURCE")
 
 # 4. Header
 st.markdown(f"""
@@ -117,14 +140,14 @@ st.markdown(f"""
 try:
     client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 except:
-    st.error("Credential Error.")
+    st.error("Credential Error: Check Streamlit Secrets.")
     st.stop()
 
 if "messages" not in st.session_state: st.session_state.messages = []
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 6. Chat Logic
+# 6. Core Logic
 if prompt := st.chat_input("Query the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
@@ -149,11 +172,11 @@ if prompt := st.chat_input("Query the Master Source..."):
                 data_stream.append(res.choices[0].message.content)
             except: pass
 
-        # Final Synthesis
+        # Master Synthesis Output
         synthesis = client.chat.completions.create(
             model="openai/gpt-4o", 
             messages=[
-                {"role": "system", "content": "You are KLUE. Provide a definitive, professional synthesis. No fluff."},
+                {"role": "system", "content": "You are KLUE. Provide a definitive, high-accuracy synthesis. Technical and professional tone only."},
                 {"role": "user", "content": f"Data: {data_stream}. Query: {prompt}"}
             ]
         )
