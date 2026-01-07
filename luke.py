@@ -36,11 +36,11 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR: TUNED WIDTH */
+    /* SIDEBAR: FLEXIBLE WIDTH (Fixes Collapse Bug) */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        min-width: 300px !important;
+        width: 300px !important; /* Fixed width without 'min-' allows collapse */
     }
     [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
 
@@ -93,7 +93,6 @@ if "history" not in st.session_state: st.session_state.history = []
 
 def reset_chat():
     if st.session_state.messages:
-        # Save first prompt as the title for history
         summary = st.session_state.messages[0]["content"][:30] + "..."
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages})
     st.session_state.messages = []
@@ -114,16 +113,13 @@ def show_manifesto():
     """)
     if st.button("Close"): st.rerun()
 
-# 5. SIDEBAR: CHAT HISTORY SECTION (Gemini Style)
+# 5. SIDEBAR: CHAT HISTORY SECTION
 with st.sidebar:
-    # Top Section: Navigation
     if st.button("＋ NEW CHAT"):
         reset_chat()
         st.rerun()
     
     st.markdown("---")
-    
-    # History Section
     st.markdown("### RECENT")
     if not st.session_state.history:
         st.caption("No recent activity")
@@ -134,8 +130,6 @@ with st.sidebar:
                 st.rerun()
 
     st.markdown("---")
-    
-    # Bottom Section: Strategic Oversight
     if st.button("📖 WHY KLUE?"):
         show_manifesto()
     
@@ -167,7 +161,6 @@ if prompt := st.chat_input("Command the Master Source..."):
         status_area = st.empty()
         status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
-        # Core Logic
         cores_map = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
                      "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                      "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
