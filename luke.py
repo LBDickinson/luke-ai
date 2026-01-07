@@ -20,17 +20,36 @@ st.markdown("""
     .stApp { background-color: #131314 !important; }
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
-    /* --- THE BOOSTED WHITE FORCE (Main Chat & Sidebar) --- */
-    /* This targets the main chat bubbles, sidebar labels, and markdown globally */
-    .stApp p, 
-    .stApp label, 
+    /* --- 1. THE BOOSTED WHITE FORCE (Main Chat & Sidebar Only) --- */
     [data-testid="stChatMessageContent"] p,
-    [data-testid="stMarkdownContainer"] p,
     [data-testid="stSidebar"] h3,
-    [data-testid="stSidebar"] span {
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] .stMarkdown p {
         color: #F0F2F5 !important;
         opacity: 1 !important;
         -webkit-text-fill-color: #F0F2F5 !important;
+    }
+
+    /* --- 2. THE TOOLTIP FIX (Black background, White text) --- */
+    div[data-testid="stTooltipContent"] {
+        background-color: #1E1F20 !important;
+        border: 1px solid #444 !important;
+    }
+    div[data-testid="stTooltipContent"] p, 
+    div[data-testid="stTooltipContent"] span {
+        color: #F0F2F5 !important;
+        -webkit-text-fill-color: #F0F2F5 !important;
+    }
+
+    /* --- 3. THE MANIFESTO FIX (Dark text for Light Dialog) --- */
+    [data-testid="stDialog"] div, 
+    [data-testid="stDialog"] p, 
+    [data-testid="stDialog"] h3, 
+    [data-testid="stDialog"] b, 
+    [data-testid="stDialog"] li {
+        color: #111111 !important;
+        -webkit-text-fill-color: #111111 !important;
     }
 
     /* --- THE ICON FORCE --- */
@@ -43,7 +62,7 @@ st.markdown("""
         color: #F0F2F5 !important;
     }
 
-    /* ENGINE SELECTOR - PRESERVING YOUR 'PERFECT' SETTINGS */
+    /* ENGINE SELECTOR */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
@@ -65,7 +84,7 @@ st.markdown("""
         color: #131314 !important;
     }
     
-    /* LOGO BOX - REINFORCED */
+    /* LOGO BOX */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -84,10 +103,6 @@ st.markdown("""
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
         text-align: center; letter-spacing: 2px; margin-top: 15px;
     }
-
-    /* MANIFESTO DIALOG CONTRAST */
-    .manifesto-text { color: #1E1E1E !important; }
-    .manifesto-text p, .manifesto-text h3, .manifesto-text b, .manifesto-text li { color: #1E1E1E !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -105,27 +120,24 @@ def reset_chat():
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
-    <div class="manifesto-text">
-    <h3>Stop Guessing. Move with Certainty.</h3>
-    <p>In an era where AI is fast, cheap, and <b>risks mistakes</b>, KLUE is the Audit Layer for the Modern Enterprise.</p>
-    <hr style="border-top: 1px solid #ccc;">
-    <p><b>1. THE ENSEMBLE ARCHITECTURE</b></p>
-    <p><b>KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.</b> Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.</p>
-    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px; color: #1E1E1E;">
-    <b>The Result:</b> You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get <b>THE answer.</b>
-    </blockquote>
-    <p><b>2. THE HALLUCINATION FIREWALL</b></p>
-    <p>Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is <b>astronomically low.</b></p>
-    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px; color: #1E1E1E;">
-    <b>The Result:</b> This multi-core audit <b>dramatically reduces</b> your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
-    </blockquote>
-    <p><b>3. PRECISION OVER SPEED</b></p>
-    <p>Speed is a commodity; Accuracy is a luxury. Think of standard AI as a <b>Calculator</b>—great for routine math and daily tasks. Think of KLUE as the <b>Auditor</b>—essential for the 20% of decisions that carry 80% of your business risk.</p> 
-    <blockquote style="border-left: 5px solid #A5D8FF; padding-left: 15px; color: #1E1E1E;">
-    <b>The Result:</b> We don't compete on milliseconds; we compete on the <b>integrity of the outcome.</b>
-    </blockquote>
-    </div>
-    """, unsafe_allow_html=True)
+    ### Stop Guessing. Move with Certainty.
+    In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
+    ---
+    **1. THE ENSEMBLE ARCHITECTURE**
+    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
+    
+    > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
+
+    **2. THE HALLUCINATION FIREWALL**
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**
+    
+    > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+
+    **3. PRECISION OVER SPEED**
+    Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
+    
+    > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
+    """)
     if st.button("Close"): st.rerun()
 
 # 5. SIDEBAR
