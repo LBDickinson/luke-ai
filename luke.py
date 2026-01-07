@@ -21,7 +21,6 @@ st.markdown("""
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
     /* TARGETED TITANIUM WHITE FORCE */
-    /* This hits the 'RECENT' header and 'Engine Selection' label specifically */
     [data-testid="stSidebar"] h3, 
     [data-testid="stSidebar"] label,
     [data-testid="stSidebar"] .stMarkdown p,
@@ -30,15 +29,25 @@ st.markdown("""
         opacity: 1 !important;
     }
 
-    /* SELECTOR BOX TEXT FORCE (Fixes grey text inside the box) */
+    /* SELECTOR BOX TEXT FORCE */
     div[data-baseweb="select"] div, 
     div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
         opacity: 1 !important;
     }
 
-    /* COLLAPSE ARROWS - FORCE WHITE */
-    [data-testid="collapsedControl"] svg {
+    /* --- THE ICON FIX --- */
+    /* FORCE WHITE COLLAPSE ARROWS (Targeting the actual SVG paths) */
+    [data-testid="collapsedControl"] svg, 
+    [data-testid="collapsedControl"] svg path {
+        fill: #F0F2F5 !important;
+        stroke: #F0F2F5 !important;
+        color: #F0F2F5 !important;
+    }
+
+    /* FORCE WHITE HELP "?" ICON */
+    [data-testid="stWidgetLabel"] svg,
+    [data-testid="stWidgetLabel"] button svg {
         fill: #F0F2F5 !important;
         color: #F0F2F5 !important;
     }
@@ -81,12 +90,6 @@ st.markdown("""
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
         text-align: center; letter-spacing: 2px; margin-top: 15px;
     }
-    
-    /* HELP ICON COLOR */
-    [data-testid="stWidgetLabel"] svg {
-        fill: #A5D8FF !important;
-        color: #A5D8FF !important;
-    }
 
     /* MANIFESTO DIALOG CONTRAST */
     .manifesto-text { color: #1E1E1E !important; }
@@ -104,7 +107,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Agreed Copy)
+# 4. MANIFESTO
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -177,7 +180,7 @@ st.markdown("""
 
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
-# 7. CHAT DISPLAY
+# 7. DISPLAY
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
