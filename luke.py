@@ -41,7 +41,7 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-    /* DROPDOWN POPUP: The "Inside" Fix */
+    /* DROPDOWN POPUP: Removing the white background */
     div[data-baseweb="popover"] { background-color: transparent !important; }
     ul[data-testid="stSelectboxVirtualList"] {
         background-color: #262730 !important;
@@ -103,7 +103,6 @@ st.markdown("""
         font-weight: 700;
         letter-spacing: 1.5px;
         margin-top: 30px;
-        opacity: 1 !important;
     }
 
     /* 6. INPUT PILL */
@@ -118,7 +117,17 @@ st.markdown("""
 
 # 3. Sidebar Configuration
 with st.sidebar:
-    st.markdown("### ENGINE SELECTION")
+    # Tooltip Specs
+    core_specs = (
+        "LITE: 2 CORES\n"
+        "Rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
+        "PRO: 4 CORES\n"
+        "Deep logic. Best for verified insights and business reasoning.\n\n"
+        "META: 5 CORES\n"
+        "Master synthesis. Best for high-stakes accuracy and definitive results."
+    )
+    
+    st.markdown("### ENGINE SELECTION", help=core_specs)
     
     selected_mode = st.selectbox(
         "OPERATING MODE",
@@ -136,7 +145,6 @@ with st.sidebar:
     else: 
         st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
     
-    # The New Combined Intelligence Anchor
     st.markdown("<div class='sidebar-footer'>KLUE | COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 4. Header
