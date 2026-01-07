@@ -18,30 +18,35 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* 1. UNIVERSAL TEXT FORCE */
-    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p {
+    /* UNIVERSAL TEXT FORCE */
+    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p, .stSelectbox label p {
         color: #F0F2F5 !important;
     }
 
-    /* 2. ENGINE SELECTOR TEXT - TARGETING INTERNAL SPAN */
-    div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+    /* SELECTOR BOX: FIX WHITE-ON-WHITE */
+    /* Target the container background and the text span simultaneously */
+    div[data-baseweb="select"] > div {
+        background-color: #262730 !important;
+        color: #F0F2F5 !important;
+        border: 1px solid #444 !important;
+    }
+    div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
     }
 
-    /* 3. COLLAPSE ARROWS - FORCE WHITE */
+    /* ARROWS & COLLAPSE CONTROL */
     [data-testid="collapsedControl"] svg {
         fill: #F0F2F5 !important;
         color: #F0F2F5 !important;
     }
 
-    /* 4. SIDEBAR: FLEX-BASIS FOR MANUAL RESIZE */
+    /* SIDEBAR STYLE (Native width restored for manual resize) */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        flex-basis: 260px !important;
     }
 
-    /* 5. LOGO BOX - REINFORCED */
+    /* LOGO BOX - REINFORCED */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -57,20 +62,20 @@ st.markdown("""
         text-transform: uppercase; margin-top: 10px;
     }
 
-    /* 6. STATUS BOXES */
+    /* STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
         text-align: center; letter-spacing: 2px; margin-top: 15px;
     }
 
-    /* 7. HELP ICON COLOR */
+    /* HELP ICON */
     [data-testid="stWidgetLabel"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
     }
     
-    /* 8. BUTTONS */
+    /* BUTTONS */
     div.stButton > button {
         background-color: transparent !important;
         border: 1px solid #444 !important;
@@ -93,7 +98,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Verification)
+# 4. MANIFESTO (Full Copy)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.write("### **Stop Guessing. Move with Certainty.**")
@@ -123,7 +128,8 @@ with st.sidebar:
             if st.button(item["title"], key=f"hist_{i}"):
                 st.session_state.messages = item["chat"]; st.rerun()
 
-    for _ in range(12): st.sidebar.write("") 
+    # Manual push to bottom
+    for _ in range(15): st.sidebar.write("") 
     
     st.markdown("---")
     if st.button("📖 WHY KLUE?"): show_manifesto()
