@@ -18,18 +18,25 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* UNIVERSAL TITANIUM WHITE FORCE */
+    /* 1. TITANIUM WHITE FORCE (Global & Widgets) */
     .stApp p, .stApp label, .stApp span, [data-testid="stMarkdownContainer"] p, 
-    [data-testid="stWidgetLabel"] p, div[data-baseweb="select"] span {
+    [data-testid="stWidgetLabel"] p, div[data-baseweb="select"] * {
         color: #F0F2F5 !important;
     }
 
-    /* MANIFESTO DIALOG CONTRAST */
+    /* 2. TOOLTIP/HELP TEXT FORCE (Ensures hover text is visible) */
+    div[data-testid="stTooltipContent"] p, 
+    div[data-testid="stTooltipContent"] span,
+    div[data-testid="stTooltipContent"] * {
+        color: #F0F2F5 !important;
+    }
+
+    /* 3. MANIFESTO DIALOG CONTRAST (Dark text on light background) */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3, [data-testid="stDialog"] blockquote {
         color: #333333 !important;
     }
 
-    /* ICE BLUE TINT FOR ICONS */
+    /* 4. ICE BLUE TINT FOR ICONS */
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
         color: #A5D8FF !important;
     }
@@ -38,13 +45,13 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR STYLE & PINNING */
+    /* 5. SIDEBAR STYLE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
     
-    /* BUTTON HOVER */
+    /* 6. BUTTON HOVER */
     div.stButton > button {
         background-color: transparent;
         border: 1px solid #444;
@@ -57,7 +64,7 @@ st.markdown("""
         color: #131314 !important;
     }
     
-    /* LOGO */
+    /* 7. LOGO */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -68,7 +75,7 @@ st.markdown("""
         border: 2px solid #555; border-bottom-left-radius: 45px; 
     }
 
-    /* STATUS BOXES */
+    /* 8. STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -87,7 +94,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Agreed Copy)
+# 4. MANIFESTO
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -102,7 +109,9 @@ def show_manifesto():
     > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
 
     **2. THE HALLUCINATION FIREWALL**
-    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.** > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**
+    
+    > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
 
     **3. PRECISION OVER SPEED**
     Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
@@ -124,7 +133,7 @@ with st.sidebar:
             if st.button(item["title"], key=f"hist_{i}"):
                 st.session_state.messages = item["chat"]; st.rerun()
 
-    # Manual push to bottom
+    # Dynamic spacer to push Engine Selection to bottom
     for _ in range(15): st.sidebar.write("") 
     
     st.markdown("---")
@@ -146,17 +155,17 @@ with st.sidebar:
     else: 
         st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
 
-# 6. BRANDING
+# 6. BRANDING & CLIENT
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div></div>", unsafe_allow_html=True)
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
-# 7. DISPLAY
+# 7. CHAT DISPLAY
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
         st.markdown(msg["content"])
 
-# 8. RUN
+# 8. EXECUTION
 if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=":material/radio_button_checked:"):
