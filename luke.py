@@ -24,40 +24,31 @@ st.markdown("""
         border-right: 1px solid #333333;
     }
     
-    /* Force all text to stay white */
-    [data-testid="stSidebar"] * {
+    /* Force Sidebar labels and captions to Bright White */
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] .stMarkdown {
         color: #FFFFFF !important;
         font-weight: 600 !important;
+        opacity: 1 !important;
     }
     
-    /* SELECTBOX: Box Surface */
+    /* SELECTBOX: Layered Surface Fix */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
         color: #FFFFFF !important;
     }
 
-    /* DROPDOWN POPUP: The "Inside" of the list */
-    div[data-baseweb="popover"] {
-        background-color: transparent !important;
-    }
-    
+    /* DROPDOWN POPUP: The "Inside" Fix */
+    div[data-baseweb="popover"] { background-color: transparent !important; }
     ul[data-testid="stSelectboxVirtualList"] {
-        background-color: #262730 !important; /* Forces the inside to be dark grey */
+        background-color: #262730 !important;
         border: 1px solid #444 !important;
     }
-
-    /* Individual items in the list */
-    div[role="option"] {
-        background-color: #262730 !important;
-        color: #FFFFFF !important;
-    }
-
-    /* Hover effect for the list items */
-    div[role="option"]:hover {
-        background-color: #3D3E47 !important;
-        color: #A5D8FF !important; /* Slight blue tint on hover */
-    }
+    div[role="option"] { background-color: #262730 !important; color: #FFFFFF !important; }
+    div[role="option"]:hover { background-color: #3D3E47 !important; color: #A5D8FF !important; }
 
     .block-container { max-width: 800px; padding-top: 2.5rem !important; }
 
@@ -76,7 +67,7 @@ st.markdown("""
         animation: logo-shine 8s linear infinite;
     }
     @keyframes logo-shine { to { background-position: 200% center; } }
-    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 400; opacity: 1; }
+    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 400; }
 
     /* 5. TIERED ICE BLUE STATUS BOXES */
     .status-base {
@@ -90,15 +81,12 @@ st.markdown("""
         letter-spacing: 2px;
         margin-top: 10px;
     }
-
     .status-lite { background-color: rgba(165, 216, 255, 0.05); }
-
     .status-pro {
         background-color: rgba(165, 216, 255, 0.1);
         box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4);
         border: 2px solid #A5D8FF !important;
     }
-
     .status-meta {
         background: linear-gradient(90deg, rgba(165,216,255,0.1) 0%, rgba(165,216,255,0.4) 50%, rgba(165,216,255,0.1) 100%);
         background-size: 200% auto;
@@ -107,6 +95,16 @@ st.markdown("""
         animation: shimmer 4s linear infinite;
     }
     @keyframes shimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+
+    /* FOOTER STYLING */
+    .sidebar-footer {
+        color: #FFFFFF !important;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        margin-top: 30px;
+        opacity: 1 !important;
+    }
 
     /* 6. INPUT PILL */
     .stChatInputContainer > div {
@@ -120,19 +118,13 @@ st.markdown("""
 
 # 3. Sidebar Configuration
 with st.sidebar:
-    st.markdown("### SYSTEM HIERARCHY")
-    
-    mode_help = (
-        "**Lite:** 2 Rapid Engines. Speed-optimized.\n\n"
-        "**Pro:** 4 Integrated Engines. Deep-reasoning logic.\n\n"
-        "**Meta:** 5 Frontier Engines. Full-power Master Insight."
-    )
+    st.markdown("### ENGINE SELECTION")
     
     selected_mode = st.selectbox(
         "OPERATING MODE",
         ["Lite", "Pro", "Meta"],
         index=1,
-        help=mode_help
+        label_visibility="collapsed"
     )
     
     st.markdown("---")
@@ -143,14 +135,15 @@ with st.sidebar:
         st.markdown("<div class='status-base status-pro'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
     else: 
         st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
-        
-    st.caption("KLUE v5.7 / THE MASTER SOURCE")
+    
+    # The New Combined Intelligence Anchor
+    st.markdown("<div class='sidebar-footer'>KLUE | COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 4. Header
 st.markdown(f"""
     <div class='branding-container'>
         <div class='logo'>KLUE</div>
-        <div class='tagline'>Unified Ai</div>
+        <div class='tagline'>Unified AI</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -193,7 +186,7 @@ if prompt := st.chat_input("Command the Master Source..."):
         synthesis = client.chat.completions.create(
             model="openai/gpt-4o", 
             messages=[
-                {"role": "system", "content": "You are KLUE. Provide a definitive, no-fluff synthesis. Master-level precision required."},
+                {"role": "system", "content": "You are KLUE. Provide a definitive, no-fluff synthesis."},
                 {"role": "user", "content": f"Data: {data_stream}. Query: {prompt}"}
             ]
         )
