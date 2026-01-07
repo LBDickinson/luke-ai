@@ -16,11 +16,10 @@ st.markdown("""
     [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
     
-    /* BACKGROUND LOCKS */
     .stApp { background-color: #131314 !important; }
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
-    /* --- 1. THE BOOSTED WHITE FORCE (Main Chat & Sidebar Only) --- */
+    /* TITANIUM WHITE FORCE */
     [data-testid="stChatMessageContent"] p,
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] label,
@@ -31,71 +30,50 @@ st.markdown("""
         -webkit-text-fill-color: #F0F2F5 !important;
     }
 
-    /* --- 2. THE TOOLTIP FIX (Black background, White text) --- */
+    /* TOOLTIP FIX */
     div[data-testid="stTooltipContent"] {
         background-color: #1E1F20 !important;
         border: 1px solid #444 !important;
     }
-    div[data-testid="stTooltipContent"] p, 
-    div[data-testid="stTooltipContent"] span {
+    div[data-testid="stTooltipContent"] p, div[data-testid="stTooltipContent"] span {
         color: #F0F2F5 !important;
-        -webkit-text-fill-color: #F0F2F5 !important;
     }
 
-    /* --- 3. THE MANIFESTO FIX (Dark text for Light Dialog) --- */
-    [data-testid="stDialog"] div, 
-    [data-testid="stDialog"] p, 
-    [data-testid="stDialog"] h3, 
-    [data-testid="stDialog"] b, 
-    [data-testid="stDialog"] li {
+    /* MANIFESTO FIX */
+    [data-testid="stDialog"] div, [data-testid="stDialog"] p, [data-testid="stDialog"] h3, 
+    [data-testid="stDialog"] b, [data-testid="stDialog"] li {
         color: #111111 !important;
         -webkit-text-fill-color: #111111 !important;
     }
 
-    /* --- THE ICON FORCE --- */
-    [data-testid="collapsedControl"] svg, 
-    [data-testid="collapsedControl"] svg path,
-    [data-testid="stWidgetLabel"] svg,
-    [data-testid="stWidgetLabel"] button svg {
+    /* ICON FORCE */
+    [data-testid="collapsedControl"] svg, [data-testid="collapsedControl"] svg path,
+    [data-testid="stWidgetLabel"] svg, [data-testid="stWidgetLabel"] button svg {
         fill: #F0F2F5 !important;
         stroke: #F0F2F5 !important;
         color: #F0F2F5 !important;
     }
 
     /* ENGINE SELECTOR */
-    div[data-baseweb="select"] > div {
-        background-color: #262730 !important;
-        border: 1px solid #444 !important;
-    }
-    div[data-baseweb="select"] * {
-        color: #F0F2F5 !important;
-    }
+    div[data-baseweb="select"] > div { background-color: #262730 !important; border: 1px solid #444 !important; }
+    div[data-baseweb="select"] * { color: #F0F2F5 !important; }
 
-    /* BUTTONS STYLE */
+    /* BUTTONS */
     div.stButton > button {
-        background-color: transparent !important;
-        border: 1px solid #444 !important;
-        color: #F0F2F5 !important;
-        width: 100%;
-        text-align: left;
+        background-color: transparent !important; border: 1px solid #444 !important;
+        color: #F0F2F5 !important; width: 100%; text-align: left;
     }
-    div.stButton > button:hover {
-        background-color: #A5D8FF !important;
-        color: #131314 !important;
-    }
+    div.stButton > button:hover { background-color: #A5D8FF !important; color: #131314 !important; }
     
-    /* LOGO BOX */
+    /* LOGO */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
-        padding: 15px 35px 20px 35px; 
-        background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
-        background-size: 200% auto;
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        border: 2px solid #555 !important;
-        border-bottom-left-radius: 45px;
+        padding: 15px 35px 20px 35px; background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
+        background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        border: 2px solid #555 !important; border-bottom-left-radius: 45px;
     }
-    .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400; text-transform: uppercase; margin-top: 10px; }
+    .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 10px; }
 
     /* STATUS BOXES */
     .status-base {
@@ -124,18 +102,13 @@ def show_manifesto():
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
     ---
     **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
-    
+    **KLUE operates on an Ensemble Architecture, engaging the world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences to ensure your data is scrutinized from every angle.
     > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
-
     **2. THE HALLUCINATION FIREWALL**
-    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**
-    
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact, the probability of multiple independent architectures telling the same highly specific lie is **astronomically low.**
     > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
-
     **3. PRECISION OVER SPEED**
-    Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
-    
+    Speed is a commodity; Accuracy is a luxury. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
     > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
     """)
     if st.button("Close"): st.rerun()
@@ -159,16 +132,16 @@ with st.sidebar:
     if st.button("📖 WHY KLUE?"): show_manifesto()
     
     core_specs = (
-        "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
-        "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
-        "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
+        "**LITE: 3 CORES**\nOptimized for rapid creative flow with majority consensus. Best for brainstorming.\n\n"
+        "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights.\n\n"
+        "**META: 5 CORES**\nFull-power master synthesis. High-stakes accuracy."
     )
     
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("Engine Selection", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
     if selected_mode == "Lite": 
-        st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
+        st.markdown("<div class='status-base'>3 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": 
         st.markdown("<div class='status-base' style='box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important;'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
     else: 
@@ -177,13 +150,7 @@ with st.sidebar:
     st.markdown("<div style='color:#F0F2F5; font-size:0.65rem; letter-spacing:3px; text-align:center; margin-top:10px; text-transform:uppercase;'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 6. BRANDING
-st.markdown("""
-    <div class='branding-container'>
-        <div class='logo'>KLUE</div>
-        <div class='logo-sub'>UNIFIED AI</div>
-    </div>
-    """, unsafe_allow_html=True)
-
+st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='logo-sub'>UNIFIED AI</div></div>", unsafe_allow_html=True)
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
 # 7. DISPLAY
@@ -199,7 +166,8 @@ if prompt := st.chat_input("Command the Master Source..."):
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=":material/hub:"):
         status_area = st.empty(); status_area.markdown("`[SYSTEM: CONVENING BOARD MEETING...]`")
-        modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
+        # UPDATED LITE MODE: Added Claude 3 Haiku for 3-core consensus
+        modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3-haiku"],
                  "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                  "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
         cores = modes[selected_mode]
