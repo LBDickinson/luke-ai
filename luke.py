@@ -4,98 +4,88 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Master Aesthetic + Visibility Overrides
+# 2. Nuclear High-Contrast UI (Gemini Charcoal Edition)
 st.markdown("""
     <style>
-    /* 1. SEAMLESS HEADER & TOGGLE VISIBILITY */
-    [data-testid="stHeader"] {background: transparent;}
+    /* HIDE DEFAULTS */
+    header {visibility: hidden;}
+    [data-testid="stHeader"] {display: none;}
     footer {visibility: hidden;}
 
-    /* FORCE SIDEBAR ARROW TO BE BRIGHT WHITE & VISIBLE */
+    /* NUCLEAR OPTION: FORCE SIDEBAR TOGGLE TO BRIGHT WHITE */
     button[data-testid="stBaseButton-headerNoPadding"] svg {
         fill: #FFFFFF !important;
+        stroke: #FFFFFF !important;
         color: #FFFFFF !important;
-        width: 32px;
-        height: 32px;
-        filter: drop-shadow(0px 0px 3px rgba(255,255,255,0.5));
+        width: 35px !important;
+        height: 35px !important;
+        filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8)) !important;
     }
 
-    /* 2. GLOBAL THEME (Gemini Charcoal) */
+    /* GLOBAL THEME */
     .stApp { 
         background-color: #131314; 
-        color: #E3E3E3; 
+        color: #FFFFFF !important; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* 3. SIDEBAR STYLING */
+    /* SIDEBAR TEXT FORCE-BRIGHT */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
-    [data-testid="stSidebar"] .stMarkdown p, [data-testid="stSidebar"] label {
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label, [data-testid="stSidebar"] .stMarkdown {
         color: #FFFFFF !important;
-        font-weight: 500;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
     }
 
-    .block-container { max-width: 800px; padding-top: 2rem !important; }
+    .block-container { max-width: 800px; padding-top: 2.5rem !important; }
 
-    /* 4. THE LOGO: ARCHITECTURAL SHIELD */
+    /* LOGO: SHINING TITANIUM SHIELD */
     .branding-container { text-align: center; margin-bottom: 50px; }
-    
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
         padding: 15px 35px; 
-        
-        /* Shining Titanium Gradient */
         background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
         background-size: 200% auto;
         -webkit-background-clip: text; 
         -webkit-text-fill-color: transparent; 
-        
-        /* The Shield Box: Architectural Asymmetry */
-        border: 2px solid #444;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
+        border: 2px solid #555;
         border-bottom-left-radius: 45px; 
-        
-        /* Depth Shadow */
         filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6));
         animation: shine 8s linear infinite;
     }
-    
-    @keyframes shine {
-        to { background-position: 200% center; }
-    }
+    @keyframes shine { to { background-position: 200% center; } }
 
     .tagline { 
-        color: #888888; 
+        color: #BBBBBB !important; 
         font-size: 0.8rem; 
         letter-spacing: 10px; 
         margin-top: 25px; 
         text-transform: uppercase;
-        font-weight: 300;
     }
 
-    /* 5. ICE BLUE STATUS INDICATOR */
-    .merged-status {
-        color: #A5D8FF;
-        border: 1px solid #A5D8FF;
+    /* ICE BLUE STATUS BOX */
+    .unified-status {
+        color: #A5D8FF !important;
+        border: 2px solid #A5D8FF !important;
         padding: 12px;
         border-radius: 8px;
-        background-color: rgba(165, 216, 255, 0.05);
+        background-color: rgba(165, 216, 255, 0.1) !important;
         font-size: 0.85rem;
-        font-weight: 600;
+        font-weight: 700 !important;
         text-align: center;
         letter-spacing: 1px;
     }
 
-    /* 6. INPUT PILL STYLING */
+    /* INPUT PILL */
     .stChatInputContainer > div {
         background-color: #1E1F20 !important;
-        border: 1px solid #3C4043 !important;
+        border: 1px solid #555 !important;
         border-radius: 28px !important;
     }
+    textarea { color: #FFFFFF !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -103,16 +93,17 @@ st.markdown("""
 with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
     
+    # Detailed Master Help Icon Tooltip
     mode_help = (
-        "**Lite:** 2 Engines. Optimized for creative speed and brevity.\n\n"
-        "**Standard:** 4 Engines. Integrated cross-verification and logic merging.\n\n"
-        "**Meta:** 5 Engines. The master synthesis for a definitive 'One-Shot' response, "
-        "minimizing the need for corrections."
+        "**Lite:** 2 Rapid Engines. Ideal for creative flow and simple inquiries.\n\n"
+        "**Unified:** 4 Integrated Engines. Merged intelligence for high-reliability business logic.\n\n"
+        "**Meta:** The Master Tier. Activates the deepest Frontier Search and reasoning. "
+        "Engineered for high-stakes accuracy to deliver 'One-Shot' reliability."
     )
     
     selected_mode = st.selectbox(
         "OPERATING MODE",
-        ["Lite", "Standard", "Meta"],
+        ["Lite", "Unified", "Meta"],
         index=1,
         help=mode_help
     )
@@ -121,12 +112,12 @@ with st.sidebar:
     
     if selected_mode == "Lite": 
         st.info("SPEED CORE ACTIVE")
-    elif selected_mode == "Standard": 
-        st.markdown("<div class='merged-status'>MERGED INTELLIGENCE</div>", unsafe_allow_html=True)
+    elif selected_mode == "Unified": 
+        st.markdown("<div class='unified-status'>UNIFIED INTELLIGENCE</div>", unsafe_allow_html=True)
     else: 
-        st.warning("META: EXECUTIVE SYNTHESIS")
+        st.warning("META: MASTER SYNTHESIS")
         
-    st.caption("KLUE v4.6 / THE MASTER SOURCE")
+    st.caption("KLUE v5.0 / THE MASTER SOURCE")
 
 # 4. Header
 st.markdown(f"""
@@ -140,15 +131,15 @@ st.markdown(f"""
 try:
     client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 except:
-    st.error("Credential Error: Check Streamlit Secrets.")
+    st.error("Credential Error.")
     st.stop()
 
 if "messages" not in st.session_state: st.session_state.messages = []
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 6. Core Logic
-if prompt := st.chat_input("Query the Master Source..."):
+# 6. Chat Logic
+if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
 
@@ -156,13 +147,14 @@ if prompt := st.chat_input("Query the Master Source..."):
         message_placeholder = st.empty()
         
         if selected_mode == "Lite":
-            message_placeholder.markdown("`[STATUS: DEPLOYING SPEED CORES]`")
+            message_placeholder.markdown("`[STATUS: DEPLOYING LITE CORES]`")
             models = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
-        elif selected_mode == "Standard":
+        elif selected_mode == "Unified":
             message_placeholder.markdown("`[STATUS: MERGING UNIFIED LOGIC]`")
             models = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
         else:
-            message_placeholder.markdown("`[STATUS: PERFORMING META SYNTHESIS]`")
+            message_placeholder.markdown("`[STATUS: ENGAGING META DEEP SEARCH]`")
+            # META MODE: Calls Frontier "Deep Search" models only
             models = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
         
         data_stream = []
@@ -172,11 +164,11 @@ if prompt := st.chat_input("Query the Master Source..."):
                 data_stream.append(res.choices[0].message.content)
             except: pass
 
-        # Master Synthesis Output
+        # Final Synthesis
         synthesis = client.chat.completions.create(
             model="openai/gpt-4o", 
             messages=[
-                {"role": "system", "content": "You are KLUE. Provide a definitive, high-accuracy synthesis. Technical and professional tone only."},
+                {"role": "system", "content": "You are KLUE. Provide a definitive, technical synthesis. No fluff."},
                 {"role": "user", "content": f"Data: {data_stream}. Query: {prompt}"}
             ]
         )
