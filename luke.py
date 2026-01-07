@@ -91,4 +91,4 @@ if prompt := st.chat_input("Ask the Council..."):
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 st.markdown("---")
-st.caption("© 2026 L
+st.caption("© 2026 L.B. Dickinson | [Terms of Service](https://github.com/LBDickinson/luke-ai/blob/main/TERMS.md)")
