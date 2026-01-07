@@ -4,31 +4,51 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Master Aesthetic (High Contrast & Tiered Lustre)
+# 2. Master Aesthetic (High Contrast & Layered Dark Mode)
 st.markdown("""
     <style>
     /* 1. CLEANUP */
     [data-testid="stDecoration"] {display: none;}
     [data-testid="stHeader"] {background: transparent;}
     
-    /* 2. GLOBAL THEME (High-Contrast White Text) */
+    /* 2. GLOBAL THEME (Pure White Text) */
     .stApp { 
         background-color: #131314; 
         color: #FFFFFF !important; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* 3. SIDEBAR VISIBILITY FIX */
+    /* 3. SIDEBAR VISIBILITY & LAYERED SELECTBOX */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
-    /* Force all sidebar text to be Bright White */
+    
+    /* Force all text to stay white */
     [data-testid="stSidebar"] * {
         color: #FFFFFF !important;
         font-weight: 600 !important;
     }
     
+    /* SELECTBOX: Layered Surface Fix */
+    div[data-baseweb="select"] > div {
+        background-color: #262730 !important; /* Lighter surface */
+        border: 1px solid #444 !important;
+        color: #FFFFFF !important;
+    }
+    
+    /* Ensure the dropdown list also stays dark/legible */
+    ul[data-testid="stSelectboxVirtualList"] {
+        background-color: #262730 !important;
+    }
+    li[role="option"] {
+        color: #FFFFFF !important;
+        background-color: transparent !important;
+    }
+    li[role="option"]:hover {
+        background-color: #3D3E47 !important;
+    }
+
     .block-container { max-width: 800px; padding-top: 2.5rem !important; }
 
     /* 4. LOGO: SHINING TITANIUM SHIELD */
@@ -46,7 +66,7 @@ st.markdown("""
         animation: logo-shine 8s linear infinite;
     }
     @keyframes logo-shine { to { background-position: 200% center; } }
-    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 400; opacity: 0.9; }
+    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 400; opacity: 1; }
 
     /* 5. TIERED ICE BLUE STATUS BOXES */
     .status-base {
@@ -62,9 +82,7 @@ st.markdown("""
     }
 
     /* LITE: Clean Static */
-    .status-lite {
-        background-color: rgba(165, 216, 255, 0.05);
-    }
+    .status-lite { background-color: rgba(165, 216, 255, 0.05); }
 
     /* PRO: Glowing */
     .status-pro {
@@ -112,7 +130,6 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Status Indicators
     if selected_mode == "Lite": 
         st.markdown("<div class='status-base status-lite'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": 
@@ -120,7 +137,7 @@ with st.sidebar:
     else: 
         st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
         
-    st.caption("KLUE v5.5 / THE MASTER SOURCE")
+    st.caption("KLUE v5.6 / THE MASTER SOURCE")
 
 # 4. Header
 st.markdown(f"""
@@ -149,7 +166,6 @@ if prompt := st.chat_input("Command the Master Source..."):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         
-        # Engine Routing
         if selected_mode == "Lite":
             message_placeholder.markdown("`[STATUS: DEPLOYING LITE CORES]`")
             models = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
@@ -167,7 +183,6 @@ if prompt := st.chat_input("Command the Master Source..."):
                 data_stream.append(res.choices[0].message.content)
             except: pass
 
-        # Final Synthesis
         synthesis = client.chat.completions.create(
             model="openai/gpt-4o", 
             messages=[
