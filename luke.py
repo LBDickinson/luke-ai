@@ -18,14 +18,14 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* TITANIUM WHITE FORCE (General) */
+    /* TITANIUM WHITE FORCE */
     [data-testid="stChatMessageContent"] p, .stMarkdown p, label {
         color: #F0F2F5 !important;
         font-size: 1.05rem;
         line-height: 1.6;
     }
 
-    /* MANIFESTO DIALOG: MAXIMUM CONTRAST CHARCOAL */
+    /* MANIFESTO DIALOG: CHARCOAL */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
         font-weight: 600;
@@ -50,17 +50,19 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* BUTTON HOVER: WHY KLUE TURNS ICE BLUE */
-    div.stButton > button:first-child {
+    /* BUTTON STYLING & HOVER */
+    div.stButton > button {
         background-color: transparent;
-        border: 1px solid #555;
+        border: 1px solid #444;
         color: #F0F2F5;
+        width: 100%;
+        text-align: left;
         transition: all 0.3s ease;
     }
-    div.stButton > button:first-child:hover {
+    div.stButton > button:hover {
         background-color: #A5D8FF !important;
         border-color: #A5D8FF !important;
-        color: #131314 !important; /* Dark text on light blue hover */
+        color: #131314 !important;
     }
     
     /* LOGO */
@@ -72,9 +74,7 @@ st.markdown("""
         background-size: 200% auto;
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         border: 2px solid #555; border-bottom-left-radius: 45px; 
-        animation: logo-shine 8s linear infinite;
     }
-    @keyframes logo-shine { to { background-position: 200% center; } }
 
     /* STATUS BOXES */
     .status-base {
@@ -87,7 +87,18 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. PRO POP-UP WINDOW (Manifesto)
+# 3. SESSION STATE FOR HISTORY
+if "messages" not in st.session_state: st.session_state.messages = []
+if "history" not in st.session_state: st.session_state.history = []
+
+def reset_chat():
+    if st.session_state.messages:
+        # Save first prompt as the title for history
+        summary = st.session_state.messages[0]["content"][:30] + "..."
+        st.session_state.history.append({"title": summary, "chat": st.session_state.messages})
+    st.session_state.messages = []
+
+# 4. PRO POP-UP WINDOW
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -95,51 +106,50 @@ def show_manifesto():
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
     
     **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** We trigger a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
-    
-    *The Result:* You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
-    
-    **2. THE HALLUCINATION FIREWALL**
-    While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.** *The Result:* This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** **2. THE HALLUCINATION FIREWALL**
+    While one model might misinterpret a fact, the probability of five independent architectures telling the same lie is **astronomically low.**
     
     **3. PRECISION OVER SPEED**
-    Think of standard AI as a **Calculator**—great for routine tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk.
+    Think of standard AI as a **Calculator**. Think of KLUE as the **Auditor**.
     """)
-    if st.button("Close"):
-        st.rerun()
+    if st.button("Close"): st.rerun()
 
-# 4. SIDEBAR
+# 5. SIDEBAR: CHAT HISTORY SECTION (Gemini Style)
 with st.sidebar:
-    st.markdown("### Strategic Oversight")
-    if st.button("📖 WHY KLUE?"):
-        show_manifesto()
+    # Top Section: Navigation
+    if st.button("＋ NEW CHAT"):
+        reset_chat()
+        st.rerun()
     
     st.markdown("---")
     
-    core_specs = (
-        "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
-        "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
-        "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
-    )
+    # History Section
+    st.markdown("### RECENT")
+    if not st.session_state.history:
+        st.caption("No recent activity")
+    else:
+        for i, item in enumerate(reversed(st.session_state.history)):
+            if st.button(item["title"], key=f"hist_{i}"):
+                st.session_state.messages = item["chat"]
+                st.rerun()
+
+    st.markdown("---")
     
+    # Bottom Section: Strategic Oversight
+    if st.button("📖 WHY KLUE?"):
+        show_manifesto()
+    
+    core_specs = "**LITE: 2 CORES**\n**PRO: 4 CORES**\n**META: 5 CORES**"
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
-    if selected_mode == "Lite": st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
-    elif selected_mode == "Pro": st.markdown("<div class='status-base status-pro'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
-    else: st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
+    if selected_mode == "Lite": st.markdown("<div class='status-base'>2 CORES: SPEED</div>", unsafe_allow_html=True)
+    elif selected_mode == "Pro": st.markdown("<div class='status-base status-pro'>4 CORES: DEEP</div>", unsafe_allow_html=True)
+    else: st.markdown("<div class='status-base status-meta'>5 CORES: MASTER</div>", unsafe_allow_html=True)
 
-# 5. BRANDING
+# 6. BRANDING & CLIENT
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div></div>", unsafe_allow_html=True)
-
-# 6. OPENROUTER CLIENT
-try:
-    client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
-except:
-    st.error("API Key Missing.")
-    st.stop()
-
-if "messages" not in st.session_state: st.session_state.messages = []
+client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
 # 7. CHAT DISPLAY
 for msg in st.session_state.messages:
@@ -157,6 +167,7 @@ if prompt := st.chat_input("Command the Master Source..."):
         status_area = st.empty()
         status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
+        # Core Logic
         cores_map = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
                      "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                      "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
@@ -171,7 +182,7 @@ if prompt := st.chat_input("Command the Master Source..."):
 
         master = client.chat.completions.create(
             model="openai/gpt-4o",
-            messages=[{"role": "system", "content": "You are KLUE. Provide a definitive synthesis. Master intelligence mode."},
+            messages=[{"role": "system", "content": "You are KLUE. Provide a definitive synthesis."},
                       {"role": "user", "content": f"Intelligence Data: {core_outputs}. Command: {prompt}"}]
         )
         
