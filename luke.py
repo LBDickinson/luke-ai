@@ -18,39 +18,29 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* 1. UNIVERSAL TEXT & SELECTOR FORCE */
+    /* UNIVERSAL TITANIUM WHITE (Specific to text to avoid icon white-out) */
     .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p, .stSelectbox label p {
         color: #F0F2F5 !important;
     }
-    
-    /* Force Selectbox value visibility */
-    div[data-baseweb="select"] > div {
-        color: #F0F2F5 !important;
-        background-color: #262730 !important;
-    }
 
-    /* 2. HELP TOOLTIP VISIBILITY */
-    div[data-testid="stTooltipContent"] {
-        background-color: #1E1F20 !important;
-        border: 1px solid #444 !important;
-    }
-    div[data-testid="stTooltipContent"] p, div[data-testid="stTooltipContent"] span {
+    /* ENGINE SELECTOR TEXT FORCE (Forcing the actual value to White) */
+    div[data-baseweb="select"] div, div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
     }
 
-    /* 3. MANIFESTO DIALOG CONTRAST */
+    /* MANIFESTO DIALOG CONTRAST */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
     }
 
-    /* 4. SIDEBAR: NARROWER + COLLAPSIBLE */
+    /* SIDEBAR: FLEXIBLE + SLIDING */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        min-width: 260px !important;
+        width: 260px !important; /* Fixed width allows the sliding/collapse mechanism to work */
     }
 
-    /* 5. LOGO BOX - REINFORCED */
+    /* LOGO BOX - REINFORCED ALL SIDES */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -66,21 +56,31 @@ st.markdown("""
         text-transform: uppercase; margin-top: 10px;
     }
 
-    /* 6. STATUS BOXES & TAGLINES */
+    /* STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
         text-align: center; letter-spacing: 2px; margin-top: 15px;
     }
-    .sidebar-tagline {
-        color: #F0F2F5; font-size: 0.65rem; letter-spacing: 3px; font-weight: 400;
-        text-align: center; margin-top: 10px; text-transform: uppercase;
-    }
 
-    /* 7. ICON COLOR FORCE */
+    /* ICON COLOR */
     [data-testid="stWidgetLabel"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
+    }
+    
+    /* BUTTON STYLING (Fixed white-out) */
+    div.stButton > button {
+        background-color: transparent !important;
+        border: 1px solid #444 !important;
+        color: #F0F2F5 !important;
+        width: 100%;
+        text-align: left;
+    }
+    div.stButton > button:hover {
+        background-color: #A5D8FF !important;
+        border-color: #A5D8FF !important;
+        color: #131314 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -95,7 +95,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Text with Write block to prevent truncation)
+# 4. MANIFESTO (Full Copy Verified)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.write("### **Stop Guessing. Move with Certainty.**")
@@ -136,7 +136,6 @@ with st.sidebar:
         "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
     )
     
-    # Restored Engine Selection Header
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("Engine Selection", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
@@ -147,7 +146,7 @@ with st.sidebar:
     else: 
         st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
     
-    st.markdown("<div class='sidebar-tagline'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
+    st.markdown("<div style='color:#F0F2F5; font-size:0.65rem; letter-spacing:3px; text-align:center; margin-top:10px; text-transform:uppercase;'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 6. BRANDING
 st.markdown("""
