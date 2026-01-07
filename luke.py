@@ -36,11 +36,11 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR: FLEXIBLE WIDTH (Fixes Collapse Bug) */
+    /* SIDEBAR: FLEXIBLE WIDTH (Restoring Slide/Collapse Functionality) */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        width: 300px !important; /* Fixed width without 'min-' allows collapse */
+        width: 300px !important; 
     }
     [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
 
@@ -94,7 +94,7 @@ if "history" not in st.session_state: st.session_state.history = []
 def reset_chat():
     if st.session_state.messages:
         summary = st.session_state.messages[0]["content"][:30] + "..."
-        st.session_state.history.append({"title": summary, "chat": st.session_state.messages})
+        st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
 # 4. PRO POP-UP WINDOW
@@ -133,7 +133,13 @@ with st.sidebar:
     if st.button("📖 WHY KLUE?"):
         show_manifesto()
     
-    core_specs = "**LITE: 2 CORES**\n**PRO: 4 CORES**\n**META: 5 CORES**"
+    # RESTORED FINAL DESCRIPTIONS
+    core_specs = (
+        "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
+        "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
+        "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
+    )
+    
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
@@ -161,10 +167,10 @@ if prompt := st.chat_input("Command the Master Source..."):
         status_area = st.empty()
         status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
-        cores_map = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
-                     "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
-                     "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
-        cores = cores_map[selected_mode]
+        modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
+                 "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
+                 "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
+        cores = modes[selected_mode]
         
         core_outputs = []
         for c in cores:
