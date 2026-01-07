@@ -4,65 +4,28 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Master Aesthetic & Contrast Overrides
+# 2. Master Aesthetic (Clean & Stable)
 st.markdown("""
     <style>
-    /* 1. HIDE DEFAULTS */
-    header {visibility: hidden !important;}
-    [data-testid="stHeader"] {display: none !important;}
-    footer {visibility: hidden !important;}
-
-    /* 2. THE CONTROL HUB: CONTRASTED CIRCLE BEHIND THE ARROW */
-    /* This targets the sidebar toggle button area specifically */
-    button[kind="headerNoPadding"] {
-        background-color: #A5D8FF !important; /* Ice Blue Circle */
-        border-radius: 50% !important;
-        width: 45px !important;
-        height: 45px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        position: fixed !important;
-        top: 15px !important;
-        left: 15px !important;
-        z-index: 999999 !important;
-        box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4) !important;
-    }
-
-    /* FORCE ARROW TO BE BLACK ON ICE BLUE CIRCLE FOR MAXIMUM CONTRAST */
-    button[kind="headerNoPadding"] svg {
-        fill: #131314 !important;
-        color: #131314 !important;
-        width: 25px !important;
-        height: 25px !important;
-    }
-
-    /* 3. GLOBAL THEME (Gemini Charcoal) */
+    /* HIDE ONLY THE TOP DECORATION LINE */
+    [data-testid="stDecoration"] {display: none;}
+    
+    /* GLOBAL THEME - Gemini Charcoal */
     .stApp { 
         background-color: #131314; 
-        color: #FFFFFF !important; 
+        color: #E3E3E3; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* 4. SIDEBAR TEXT FORCE-BRIGHT */
+    /* SIDEBAR STYLING - Stable Colors */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
-    /* Force ALL text in sidebar to be high-contrast white */
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] label, 
-    [data-testid="stSidebar"] .stMarkdown,
-    [data-testid="stSidebar"] div {
-        color: #FFFFFF !important;
-        font-weight: 600 !important;
-        opacity: 1 !important;
-    }
+    
+    .block-container { max-width: 800px; padding-top: 2rem !important; }
 
-    .block-container { max-width: 800px; padding-top: 2.5rem !important; }
-
-    /* 5. LOGO: SHINING TITANIUM SHIELD */
+    /* LOGO: SHINING TITANIUM SHIELD */
     .branding-container { text-align: center; margin-bottom: 50px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -77,60 +40,77 @@ st.markdown("""
         animation: shine 8s linear infinite;
     }
     @keyframes shine { to { background-position: 200% center; } }
-    .tagline { color: #BBBBBB !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; }
+    .tagline { color: #888888; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 300; }
 
-    /* 6. ICE BLUE STATUS BOX */
+    /* ICE BLUE STATUS BOX */
     .unified-status {
         color: #A5D8FF !important;
-        border: 2px solid #A5D8FF !important;
+        border: 1px solid #A5D8FF !important;
         padding: 12px;
         border-radius: 8px;
-        background-color: rgba(165, 216, 255, 0.1) !important;
+        background-color: rgba(165, 216, 255, 0.05);
         font-size: 0.85rem;
-        font-weight: 700 !important;
+        font-weight: 600;
         text-align: center;
     }
 
-    /* 7. INPUT PILL STYLING */
+    /* INPUT PILL */
     .stChatInputContainer > div {
         background-color: #1E1F20 !important;
-        border: 1px solid #555 !important;
+        border: 1px solid #3C4043 !important;
         border-radius: 28px !important;
     }
-    textarea { color: #FFFFFF !important; }
     </style>
     """, unsafe_allow_html=True)
 
 # 3. Sidebar Hierarchy
 with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
+    
     mode_help = (
-        "**Lite:** 2 Rapid Engines. Brief tasks.\n\n"
-        "**Unified:** 4 Engines. Integrated business logic.\n\n"
-        "**Meta:** 5 Pro-Tier Engines. Deep Search and one-shot accuracy."
+        "**Lite:** 2 Rapid Engines. Brief creative tasks.\n\n"
+        "**Unified:** 4 Engines. Merged business logic.\n\n"
+        "**Meta:** The Master Tier. Frontier engines & Deep Search for 'One-Shot' accuracy."
     )
-    selected_mode = st.selectbox("OPERATING MODE", ["Lite", "Unified", "Meta"], index=1, help=mode_help)
+    
+    selected_mode = st.selectbox(
+        "OPERATING MODE",
+        ["Lite", "Unified", "Meta"],
+        index=1,
+        help=mode_help
+    )
+    
     st.markdown("---")
-    if selected_mode == "Lite": st.info("SPEED CORE ACTIVE")
-    elif selected_mode == "Unified": st.markdown("<div class='unified-status'>UNIFIED INTELLIGENCE</div>", unsafe_allow_html=True)
-    else: st.warning("META: MASTER SYNTHESIS")
-    st.caption("KLUE v5.2 / THE MASTER SOURCE")
+    
+    if selected_mode == "Lite": 
+        st.info("SPEED CORE ACTIVE")
+    elif selected_mode == "Unified": 
+        st.markdown("<div class='unified-status'>UNIFIED INTELLIGENCE</div>", unsafe_allow_html=True)
+    else: 
+        st.warning("META: MASTER SYNTHESIS")
+        
+    st.caption("KLUE v5.3 / THE MASTER SOURCE")
 
 # 4. Header
-st.markdown(f"""<div class='branding-container'><div class='logo'>KLUE</div><div class='tagline'>Unified Ai</div></div>""", unsafe_allow_html=True)
+st.markdown(f"""
+    <div class='branding-container'>
+        <div class='logo'>KLUE</div>
+        <div class='tagline'>Unified Ai</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # 5. API Logic
 try:
     client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 except:
-    st.error("Credential Error.")
+    st.error("API Key Missing in Secrets.")
     st.stop()
 
 if "messages" not in st.session_state: st.session_state.messages = []
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 6. Chat Execution
+# 6. Execution
 if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
@@ -158,7 +138,7 @@ if prompt := st.chat_input("Command the Master Source..."):
         synthesis = client.chat.completions.create(
             model="openai/gpt-4o", 
             messages=[
-                {"role": "system", "content": "You are KLUE. Provide a definitive synthesis. No fluff."},
+                {"role": "system", "content": "You are KLUE. Provide a definitive synthesis. Professional tone only."},
                 {"role": "user", "content": f"Data: {data_stream}. Query: {prompt}"}
             ]
         )
