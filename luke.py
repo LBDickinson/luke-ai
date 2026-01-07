@@ -126,3 +126,58 @@ for message in st.session_state.messages:
 
 # 7. Processing & Execution
 if prompt := st.chat_input("Enter query..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        
+        # Select engine based on toggle position
+        if ultra_mode:
+            message_placeholder.markdown("`[SYSTEM: INTEGRATING ULTRA-REASONING]`")
+            models = [
+                "openai/gpt-4o",
+                "anthropic/claude-3.5-sonnet",
+                "google/gemini-pro-1.5",
+                "meta-llama/llama-3.1-405b",
+                "mistralai/mistral-large"
+            ]
+        else:
+            message_placeholder.markdown("`[STATUS: MERGING DATA SOURCES]`")
+            models = [
+                "openai/gpt-4o-mini", 
+                "anthropic/claude-3-haiku", 
+                "google/gemini-flash-1.5",
+                "meta-llama/llama-3.1-8b-instruct",
+                "mistralai/mistral-7b-instruct"
+            ]
+        
+        # Parallel data retrieval
+        data_stream = []
+        for m in models:
+            try:
+                res = client.chat.completions.create(
+                    model=m, 
+                    messages=[{"role": "user", "content": prompt}], 
+                    max_tokens=600
+                )
+                data_stream.append(res.choices[0].message.content)
+            except:
+                pass
+
+        # Final Synthesis
+        synthesis = client.chat.completions.create(
+            model="openai/gpt-4o", 
+            messages=[
+                {"role": "system", "content": "You are KLUE. Provide a unified, technical, and objective summary of the data provided. No fluff, no metaphors, no disclaimers."},
+                {"role": "user", "content": f"Source Data: {data_stream}. Query: {prompt}"}
+            ]
+        )
+
+        final_output = synthesis.choices[0].message.content
+        message_placeholder.markdown(final_output)
+        st.session_state.messages.append({"role": "assistant", "content": final_output})
+
+st.markdown("---")
+st.caption("© 2026 L.B. Dickinson | v3.4-Industrial")
