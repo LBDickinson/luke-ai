@@ -32,7 +32,7 @@ st.markdown("""
         -webkit-text-fill-color: #F0F2F5 !important;
     }
 
-    /* SYSTEM STATUS MESSAGE FIX (Prevent White-on-White) */
+    /* SYSTEM STATUS MESSAGE FIX */
     .system-status {
         color: #A5D8FF !important;
         background-color: #1E1F20 !important;
@@ -42,6 +42,22 @@ st.markdown("""
         font-family: monospace;
         margin-bottom: 10px;
     }
+
+    /* PINNED LOGO HEADER LOGIC */
+    .sticky-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #131314;
+        z-index: 999;
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #333;
+    }
+    
+    .header-spacer { height: 160px; }
 
     /* TOOLTIP FIX */
     div[data-testid="stTooltipContent"] {
@@ -111,7 +127,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO
+# 4. MANIFESTO (FULL RESTORED VERSION)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -171,8 +187,15 @@ with st.sidebar:
     
     st.markdown("<div style='color:#F0F2F5; font-size:0.65rem; letter-spacing:3px; text-align:center; margin-top:10px; text-transform:uppercase;'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
-# 6. BRANDING
-st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='logo-sub'>UNIFIED AI</div></div>", unsafe_allow_html=True)
+# 6. BRANDING (STICKY HEADER)
+st.markdown("""
+    <div class='sticky-header'>
+        <div class='logo'>KLUE</div>
+        <div class='logo-sub'>UNIFIED AI</div>
+    </div>
+    <div class='header-spacer'></div>
+    """, unsafe_allow_html=True)
+
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
 # 7. DISPLAY
@@ -188,7 +211,6 @@ if prompt := st.chat_input("Command the Master Source..."):
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=":material/hub:"):
         status_area = st.empty()
-        # SYSTEM STATUS UI REINFORCED
         status_area.markdown("<div class='system-status'>[SYSTEM: CONVENING BOARD MEETING...]</div>", unsafe_allow_html=True)
         
         modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3-haiku"],
