@@ -36,13 +36,24 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR: FLEXIBLE WIDTH */
+    /* SIDEBAR: MANUAL RESIZE ENABLED + FLEXBOX PINNING */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        width: 300px !important; 
+        min-width: 280px !important; /* Minimum to keep icons aligned */
+        max-width: 500px !important; /* Allows you to drag and widen it */
     }
-    [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
+
+    /* PINNING LOGIC: Push bottom section down */
+    [data-testid="stSidebarUserContent"] {
+        display: flex;
+        flex-direction: column;
+        height: 95vh;
+    }
+    .bottom-anchor {
+        margin-top: auto;
+        padding-bottom: 20px;
+    }
 
     /* FORCE HELP ICON TO ICE BLUE */
     [data-testid="stWidgetLabel"] svg {
@@ -97,32 +108,29 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. PRO POP-UP WINDOW (Restored Agreed Manifesto)
+# 4. PRO POP-UP WINDOW (Manifesto)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
     ### **Stop Guessing. Move with Certainty.**
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
-
     ---
-
     **1. THE ENSEMBLE ARCHITECTURE**
     **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
-    
     > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
-
+    
     **2. THE HALLUCINATION FIREWALL**
-    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the exact same highly specific lie is **astronomically low.** > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
-
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.** > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+    
     **3. PRECISION OVER SPEED**
     Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
-    
     > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
     """)
     if st.button("Close"): st.rerun()
 
-# 5. SIDEBAR: CHAT HISTORY SECTION
+# 5. SIDEBAR
 with st.sidebar:
+    # TOP SECTION
     if st.button("＋ NEW CHAT"):
         reset_chat()
         st.rerun()
@@ -137,11 +145,12 @@ with st.sidebar:
                 st.session_state.messages = item["chat"]
                 st.rerun()
 
+    # BOTTOM ANCHOR (Engine Selection)
+    st.markdown('<div class="bottom-anchor">', unsafe_allow_html=True)
     st.markdown("---")
     if st.button("📖 WHY KLUE?"):
         show_manifesto()
     
-    # RESTORED FULL DESCRIPTIONS
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
         "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
@@ -154,6 +163,7 @@ with st.sidebar:
     if selected_mode == "Lite": st.markdown("<div class='status-base'>2 CORES: SPEED</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": st.markdown("<div class='status-base status-pro'>4 CORES: DEEP</div>", unsafe_allow_html=True)
     else: st.markdown("<div class='status-base status-meta'>5 CORES: MASTER</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # 6. BRANDING & CLIENT
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div></div>", unsafe_allow_html=True)
