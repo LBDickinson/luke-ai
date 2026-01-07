@@ -22,7 +22,6 @@ st.markdown("""
     [data-testid="stChatMessageContent"] p, .stMarkdown p, label {
         color: #F0F2F5 !important;
         font-size: 1.05rem;
-        line-height: 1.6;
     }
 
     /* MANIFESTO DIALOG: CHARCOAL */
@@ -44,13 +43,21 @@ st.markdown("""
     }
     [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
 
-    /* FORCE HELP ICON TO ICE BLUE */
+    /* --- THE ICON FORCE: ICE BLUE TARGETING --- */
+    /* Targets the '?' help icon and the Sidebar collapse/expand arrows */
+    svg path, svg polyline, svg circle {
+        fill: #A5D8FF !important;
+        stroke: #A5D8FF !important;
+    }
+    /* Specifically target the help icon container */
     [data-testid="stWidgetLabel"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
+        filter: drop-shadow(0px 0px 3px rgba(165, 216, 255, 0.5)) !important;
     }
-    
-    /* BUTTON STYLING & HOVER */
+    /* --- END ICON FORCE --- */
+
+    /* BUTTON STYLING */
     div.stButton > button {
         background-color: transparent;
         border: 1px solid #444;
@@ -87,26 +94,27 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. SESSION STATE FOR HISTORY
+# 3. STATE MANAGEMENT
 if "messages" not in st.session_state: st.session_state.messages = []
 if "history" not in st.session_state: st.session_state.history = []
 
 def reset_chat():
     if st.session_state.messages:
-        # Save first prompt as the title for history
         summary = st.session_state.messages[0]["content"][:30] + "..."
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages})
     st.session_state.messages = []
 
-# 4. PRO POP-UP WINDOW
+# 4. POP-UP
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
     ### **Stop Guessing. Move with Certainty.**
-    In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
+    In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer.
     
     **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** **2. THE HALLUCINATION FIREWALL**
+    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.**
+    
+    **2. THE HALLUCINATION FIREWALL**
     While one model might misinterpret a fact, the probability of five independent architectures telling the same lie is **astronomically low.**
     
     **3. PRECISION OVER SPEED**
@@ -114,30 +122,20 @@ def show_manifesto():
     """)
     if st.button("Close"): st.rerun()
 
-# 5. SIDEBAR: CHAT HISTORY SECTION (Gemini Style)
+# 5. SIDEBAR
 with st.sidebar:
-    # Top Section: Navigation
     if st.button("＋ NEW CHAT"):
-        reset_chat()
-        st.rerun()
-    
+        reset_chat(); st.rerun()
     st.markdown("---")
-    
-    # History Section
     st.markdown("### RECENT")
     if not st.session_state.history:
         st.caption("No recent activity")
     else:
         for i, item in enumerate(reversed(st.session_state.history)):
             if st.button(item["title"], key=f"hist_{i}"):
-                st.session_state.messages = item["chat"]
-                st.rerun()
-
+                st.session_state.messages = item["chat"]; st.rerun()
     st.markdown("---")
-    
-    # Bottom Section: Strategic Oversight
-    if st.button("📖 WHY KLUE?"):
-        show_manifesto()
+    if st.button("📖 WHY KLUE?"): show_manifesto()
     
     core_specs = "**LITE: 2 CORES**\n**PRO: 4 CORES**\n**META: 5 CORES**"
     st.markdown("### Engine Selection", help=core_specs)
@@ -162,16 +160,13 @@ if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=":material/radio_button_checked:"):
         st.markdown(prompt)
-
     with st.chat_message("assistant", avatar=":material/hub:"):
-        status_area = st.empty()
-        status_area.markdown("`[SYSTEM: MERGING CORES...]`")
+        status_area = st.empty(); status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
-        # Core Logic
-        cores_map = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
-                     "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
-                     "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
-        cores = cores_map[selected_mode]
+        modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
+                 "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
+                 "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
+        cores = modes[selected_mode]
         
         core_outputs = []
         for c in cores:
@@ -179,13 +174,8 @@ if prompt := st.chat_input("Command the Master Source..."):
                 res = client.chat.completions.create(model=c, messages=[{"role": "user", "content": prompt}], max_tokens=600)
                 core_outputs.append(res.choices[0].message.content)
             except: continue
-
-        master = client.chat.completions.create(
-            model="openai/gpt-4o",
+        master = client.chat.completions.create(model="openai/gpt-4o", 
             messages=[{"role": "system", "content": "You are KLUE. Provide a definitive synthesis."},
-                      {"role": "user", "content": f"Intelligence Data: {core_outputs}. Command: {prompt}"}]
-        )
-        
+                      {"role": "user", "content": f"Data: {core_outputs}. Query: {prompt}"}])
         ans = master.choices[0].message.content
-        status_area.markdown(ans)
-        st.session_state.messages.append({"role": "assistant", "content": ans})
+        status_area.markdown(ans); st.session_state.messages.append({"role": "assistant", "content": ans})
