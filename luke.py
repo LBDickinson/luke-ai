@@ -11,14 +11,13 @@ st.markdown("""
     [data-testid="stHeader"] {display: none;}
     footer {visibility: hidden;}
 
-    /* Global Gemini Charcoal */
     .stApp { 
         background-color: #131314; 
         color: #E3E3E3; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Sidebar Legibility Fix */
+    /* Sidebar Legibility */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
@@ -69,16 +68,17 @@ st.markdown("""
         font-weight: 300;
     }
 
-    /* ICE BLUE STATUS BOX */
-    .ice-blue-status {
+    /* MERGED INTELLIGENCE - ICE BLUE STATUS */
+    .merged-status {
         color: #A5D8FF;
         border: 1px solid #A5D8FF;
-        padding: 10px;
-        border-radius: 5px;
+        padding: 12px;
+        border-radius: 8px;
         background-color: rgba(165, 216, 255, 0.05);
-        font-size: 0.8rem;
-        font-weight: bold;
+        font-size: 0.85rem;
+        font-weight: 600;
         text-align: center;
+        letter-spacing: 1px;
     }
 
     /* Input Pill Styling */
@@ -95,34 +95,34 @@ with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
     
     mode_help = (
-        "**Standard:** 2 Engines. Optimized for creative speed.\n\n"
-        "**Balanced:** 4 Engines. Integrated cross-verification.\n\n"
-        "**Executive:** 5 Engines. The master synthesis for a definitive 'One-Shot' response."
+        "**Lite:** 2 Engines. Optimized for creative speed.\n\n"
+        "**Standard:** 4 Engines. Integrated cross-verification.\n\n"
+        "**Meta:** 5 Engines. The master synthesis for a definitive 'One-Shot' response."
     )
     
     selected_mode = st.selectbox(
         "OPERATING MODE",
-        ["Standard", "Balanced", "Executive"],
+        ["Lite", "Standard", "Meta"],
         index=1,
         help=mode_help
     )
     
     st.markdown("---")
     
-    if selected_mode == "Standard": 
-        st.info("FAST CORE ACTIVE")
-    elif selected_mode == "Balanced": 
-        st.markdown("<div class='ice-blue-status'>ICE BLUE: UNIFIED LOGIC</div>", unsafe_allow_html=True)
+    if selected_mode == "Lite": 
+        st.info("SPEED CORE ACTIVE")
+    elif selected_mode == "Standard": 
+        st.markdown("<div class='merged-status'>MERGED INTELLIGENCE</div>", unsafe_allow_html=True)
     else: 
-        st.warning("EXECUTIVE SYNTHESIS")
+        st.warning("META: EXECUTIVE SYNTHESIS")
         
-    st.caption("KLUE v4.2 / THE MASTER SOURCE")
+    st.caption("KLUE v4.4 / THE MASTER SOURCE")
 
 # 4. Header
 st.markdown(f"""
     <div class='branding-container'>
         <div class='logo'>KLUE</div>
-        <div class='tagline'>The Master Source</div>
+        <div class='tagline'>Unified Ai</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -145,14 +145,14 @@ if prompt := st.chat_input("Query the Master Source..."):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         
-        if selected_mode == "Standard":
-            message_placeholder.markdown("`[STATUS: DEPLOYING FAST CORES]`")
+        if selected_mode == "Lite":
+            message_placeholder.markdown("`[STATUS: DEPLOYING SPEED CORES]`")
             models = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
-        elif selected_mode == "Balanced":
+        elif selected_mode == "Standard":
             message_placeholder.markdown("`[STATUS: MERGING UNIFIED LOGIC]`")
             models = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
         else:
-            message_placeholder.markdown("`[STATUS: PERFORMING EXECUTIVE SYNTHESIS]`")
+            message_placeholder.markdown("`[STATUS: PERFORMING META SYNTHESIS]`")
             models = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
         
         data_stream = []
