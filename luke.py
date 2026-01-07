@@ -4,45 +4,53 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Nuclear High-Contrast UI (Gemini Charcoal Edition)
+# 2. Master Aesthetic & Nuclear Visibility Fixes
 st.markdown("""
     <style>
-    /* HIDE DEFAULTS */
-    header {visibility: hidden;}
-    [data-testid="stHeader"] {display: none;}
-    footer {visibility: hidden;}
+    /* 1. HIDE DEFAULTS */
+    header {visibility: hidden !important;}
+    [data-testid="stHeader"] {display: none !important;}
+    footer {visibility: hidden !important;}
 
-    /* NUCLEAR OPTION: FORCE SIDEBAR TOGGLE TO BRIGHT WHITE */
-    button[data-testid="stBaseButton-headerNoPadding"] svg {
+    /* 2. FORCE SIDEBAR TOGGLE ARROW TO BRIGHT WHITE */
+    /* This targets the button and the icon regardless of sidebar state */
+    section[data-testid="stSidebar"] + div button svg,
+    button[data-testid="stBaseButton-headerNoPadding"] svg,
+    .st-emotion-cache-p5msec svg {
         fill: #FFFFFF !important;
-        stroke: #FFFFFF !important;
         color: #FFFFFF !important;
+        stroke: #FFFFFF !important;
         width: 35px !important;
         height: 35px !important;
-        filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8)) !important;
+        filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.9)) !important;
     }
 
-    /* GLOBAL THEME */
+    /* 3. GLOBAL THEME (Gemini Charcoal) */
     .stApp { 
         background-color: #131314; 
         color: #FFFFFF !important; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* SIDEBAR TEXT FORCE-BRIGHT */
+    /* 4. SIDEBAR TEXT FORCE-BRIGHT */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
-    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label, [data-testid="stSidebar"] .stMarkdown {
+    /* Force all sidebar text, labels, and icons to White */
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] .stMarkdown,
+    [data-testid="stSidebar"] div {
         color: #FFFFFF !important;
         font-weight: 600 !important;
-        font-size: 0.95rem !important;
+        opacity: 1 !important;
     }
 
     .block-container { max-width: 800px; padding-top: 2.5rem !important; }
 
-    /* LOGO: SHINING TITANIUM SHIELD */
+    /* 5. THE LOGO: ARCHITECTURAL SHIELD */
     .branding-container { text-align: center; margin-bottom: 50px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -57,16 +65,9 @@ st.markdown("""
         animation: shine 8s linear infinite;
     }
     @keyframes shine { to { background-position: 200% center; } }
+    .tagline { color: #BBBBBB !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; }
 
-    .tagline { 
-        color: #BBBBBB !important; 
-        font-size: 0.8rem; 
-        letter-spacing: 10px; 
-        margin-top: 25px; 
-        text-transform: uppercase;
-    }
-
-    /* ICE BLUE STATUS BOX */
+    /* 6. ICE BLUE STATUS BOX */
     .unified-status {
         color: #A5D8FF !important;
         border: 2px solid #A5D8FF !important;
@@ -79,7 +80,7 @@ st.markdown("""
         letter-spacing: 1px;
     }
 
-    /* INPUT PILL */
+    /* 7. INPUT PILL STYLING */
     .stChatInputContainer > div {
         background-color: #1E1F20 !important;
         border: 1px solid #555 !important;
@@ -89,43 +90,23 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Sidebar Configuration
+# 3. Sidebar Hierarchy
 with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
-    
-    # Detailed Master Help Icon Tooltip
     mode_help = (
-        "**Lite:** 2 Rapid Engines. Ideal for creative flow and simple inquiries.\n\n"
-        "**Unified:** 4 Integrated Engines. Merged intelligence for high-reliability business logic.\n\n"
-        "**Meta:** The Master Tier. Activates the deepest Frontier Search and reasoning. "
-        "Engineered for high-stakes accuracy to deliver 'One-Shot' reliability."
+        "**Lite:** 2 Rapid Engines. Brief tasks.\n\n"
+        "**Unified:** 4 Engines. Integrated business logic.\n\n"
+        "**Meta:** 5 Pro-Tier Engines. Deep Search and one-shot accuracy."
     )
-    
-    selected_mode = st.selectbox(
-        "OPERATING MODE",
-        ["Lite", "Unified", "Meta"],
-        index=1,
-        help=mode_help
-    )
-    
+    selected_mode = st.selectbox("OPERATING MODE", ["Lite", "Unified", "Meta"], index=1, help=mode_help)
     st.markdown("---")
-    
-    if selected_mode == "Lite": 
-        st.info("SPEED CORE ACTIVE")
-    elif selected_mode == "Unified": 
-        st.markdown("<div class='unified-status'>UNIFIED INTELLIGENCE</div>", unsafe_allow_html=True)
-    else: 
-        st.warning("META: MASTER SYNTHESIS")
-        
-    st.caption("KLUE v5.0 / THE MASTER SOURCE")
+    if selected_mode == "Lite": st.info("SPEED CORE ACTIVE")
+    elif selected_mode == "Unified": st.markdown("<div class='unified-status'>UNIFIED INTELLIGENCE</div>", unsafe_allow_html=True)
+    else: st.warning("META: MASTER SYNTHESIS")
+    st.caption("KLUE v5.1 / THE MASTER SOURCE")
 
 # 4. Header
-st.markdown(f"""
-    <div class='branding-container'>
-        <div class='logo'>KLUE</div>
-        <div class='tagline'>Unified Ai</div>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown(f"""<div class='branding-container'><div class='logo'>KLUE</div><div class='tagline'>Unified Ai</div></div>""", unsafe_allow_html=True)
 
 # 5. API Logic
 try:
@@ -138,7 +119,7 @@ if "messages" not in st.session_state: st.session_state.messages = []
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 6. Chat Logic
+# 6. Chat Execution
 if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
@@ -154,7 +135,6 @@ if prompt := st.chat_input("Command the Master Source..."):
             models = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
         else:
             message_placeholder.markdown("`[STATUS: ENGAGING META DEEP SEARCH]`")
-            # META MODE: Calls Frontier "Deep Search" models only
             models = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
         
         data_stream = []
@@ -164,15 +144,13 @@ if prompt := st.chat_input("Command the Master Source..."):
                 data_stream.append(res.choices[0].message.content)
             except: pass
 
-        # Final Synthesis
         synthesis = client.chat.completions.create(
             model="openai/gpt-4o", 
             messages=[
-                {"role": "system", "content": "You are KLUE. Provide a definitive, technical synthesis. No fluff."},
+                {"role": "system", "content": "You are KLUE. Provide a definitive synthesis. No fluff."},
                 {"role": "user", "content": f"Data: {data_stream}. Query: {prompt}"}
             ]
         )
-
         output = synthesis.choices[0].message.content
         message_placeholder.markdown(output)
         st.session_state.messages.append({"role": "assistant", "content": output})
