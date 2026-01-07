@@ -30,23 +30,33 @@ st.markdown("""
         font-weight: 600 !important;
     }
     
-    /* SELECTBOX: Layered Surface Fix */
+    /* SELECTBOX: Box Surface */
     div[data-baseweb="select"] > div {
-        background-color: #262730 !important; /* Lighter surface */
+        background-color: #262730 !important;
         border: 1px solid #444 !important;
         color: #FFFFFF !important;
     }
-    
-    /* Ensure the dropdown list also stays dark/legible */
-    ul[data-testid="stSelectboxVirtualList"] {
-        background-color: #262730 !important;
-    }
-    li[role="option"] {
-        color: #FFFFFF !important;
+
+    /* DROPDOWN POPUP: The "Inside" of the list */
+    div[data-baseweb="popover"] {
         background-color: transparent !important;
     }
-    li[role="option"]:hover {
+    
+    ul[data-testid="stSelectboxVirtualList"] {
+        background-color: #262730 !important; /* Forces the inside to be dark grey */
+        border: 1px solid #444 !important;
+    }
+
+    /* Individual items in the list */
+    div[role="option"] {
+        background-color: #262730 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Hover effect for the list items */
+    div[role="option"]:hover {
         background-color: #3D3E47 !important;
+        color: #A5D8FF !important; /* Slight blue tint on hover */
     }
 
     .block-container { max-width: 800px; padding-top: 2.5rem !important; }
@@ -81,17 +91,14 @@ st.markdown("""
         margin-top: 10px;
     }
 
-    /* LITE: Clean Static */
     .status-lite { background-color: rgba(165, 216, 255, 0.05); }
 
-    /* PRO: Glowing */
     .status-pro {
         background-color: rgba(165, 216, 255, 0.1);
         box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4);
         border: 2px solid #A5D8FF !important;
     }
 
-    /* META: Shimmering Bloom */
     .status-meta {
         background: linear-gradient(90deg, rgba(165,216,255,0.1) 0%, rgba(165,216,255,0.4) 50%, rgba(165,216,255,0.1) 100%);
         background-size: 200% auto;
@@ -101,7 +108,7 @@ st.markdown("""
     }
     @keyframes shimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 
-    /* 6. INPUT PILL STYLING */
+    /* 6. INPUT PILL */
     .stChatInputContainer > div {
         background-color: #1E1F20 !important;
         border: 1px solid #555 !important;
@@ -116,9 +123,9 @@ with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
     
     mode_help = (
-        "**Lite:** 2 Rapid Engines. Speed-optimized for concise tasks.\n\n"
-        "**Pro:** 4 Integrated Engines. Deep-reasoning logic for verified results.\n\n"
-        "**Meta:** 5 Frontier Engines. Full-power Master Insight for high-stakes accuracy."
+        "**Lite:** 2 Rapid Engines. Speed-optimized.\n\n"
+        "**Pro:** 4 Integrated Engines. Deep-reasoning logic.\n\n"
+        "**Meta:** 5 Frontier Engines. Full-power Master Insight."
     )
     
     selected_mode = st.selectbox(
@@ -137,7 +144,7 @@ with st.sidebar:
     else: 
         st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
         
-    st.caption("KLUE v5.6 / THE MASTER SOURCE")
+    st.caption("KLUE v5.7 / THE MASTER SOURCE")
 
 # 4. Header
 st.markdown(f"""
