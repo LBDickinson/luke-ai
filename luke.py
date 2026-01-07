@@ -20,42 +20,36 @@ st.markdown("""
     .stApp { background-color: #131314 !important; }
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
-    /* TARGETED TITANIUM WHITE FORCE */
-    [data-testid="stSidebar"] h3, 
-    [data-testid="stSidebar"] label,
-    [data-testid="stSidebar"] .stMarkdown p,
-    [data-testid="stWidgetLabel"] p {
+    /* --- THE BOOSTED WHITE FORCE (Main Chat & Sidebar) --- */
+    /* This targets the main chat bubbles, sidebar labels, and markdown globally */
+    .stApp p, 
+    .stApp label, 
+    [data-testid="stChatMessageContent"] p,
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] span {
         color: #F0F2F5 !important;
         opacity: 1 !important;
+        -webkit-text-fill-color: #F0F2F5 !important;
     }
 
-    /* SELECTOR BOX TEXT FORCE */
-    div[data-baseweb="select"] div, 
-    div[data-baseweb="select"] span {
-        color: #F0F2F5 !important;
-        opacity: 1 !important;
-    }
-
-    /* --- THE ICON FIX --- */
-    /* FORCE WHITE COLLAPSE ARROWS (Targeting the actual SVG paths) */
+    /* --- THE ICON FORCE --- */
     [data-testid="collapsedControl"] svg, 
-    [data-testid="collapsedControl"] svg path {
+    [data-testid="collapsedControl"] svg path,
+    [data-testid="stWidgetLabel"] svg,
+    [data-testid="stWidgetLabel"] button svg {
         fill: #F0F2F5 !important;
         stroke: #F0F2F5 !important;
         color: #F0F2F5 !important;
     }
 
-    /* FORCE WHITE HELP "?" ICON */
-    [data-testid="stWidgetLabel"] svg,
-    [data-testid="stWidgetLabel"] button svg {
-        fill: #F0F2F5 !important;
-        color: #F0F2F5 !important;
-    }
-
-    /* SELECTOR BOX CONTAINER STYLE */
+    /* ENGINE SELECTOR - PRESERVING YOUR 'PERFECT' SETTINGS */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
+    }
+    div[data-baseweb="select"] * {
+        color: #F0F2F5 !important;
     }
 
     /* BUTTONS STYLE */
