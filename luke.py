@@ -10,19 +10,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. MASTER AESTHETIC (The full CSS Engine)
+# 2. MASTER AESTHETIC ENGINE (Complete UI Overhaul)
 st.markdown("""
     <style>
-    /* 1. CLEANUP & HIDING DEFAULT OVERLAYS */
+    /* 1. HIDING DEFAULT OVERLAYS */
     [data-testid="stDecoration"] {display: none;}
     [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
     
-    /* 2. GLOBAL THEME (Pure White & Deep Charcoal) */
+    /* 2. GLOBAL THEME: PURE WHITE & DEEP DARK */
     .stApp { 
         background-color: #131314; 
         color: #FFFFFF !important; 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', sans-serif;
     }
 
     /* 3. SIDEBAR: HIGH CONTRAST DARK MODE */
@@ -31,24 +31,23 @@ st.markdown("""
         border-right: 1px solid #333333;
     }
     
-    /* Force Sidebar labels and captions to Bright White */
+    /* Ensuring sidebar text is forced to white */
     [data-testid="stSidebar"] p, 
     [data-testid="stSidebar"] label, 
-    [data-testid="stSidebar"] span,
-    [data-testid="stSidebar"] .stMarkdown {
+    [data-testid="stSidebar"] span {
         color: #FFFFFF !important;
         font-weight: 600 !important;
         opacity: 1 !important;
     }
     
-    /* 4. SELECTBOX DROPDOWN: PREVENTING WHITE-ON-WHITE */
+    /* 4. SELECTOR FIX: SOLVING WHITE-ON-WHITE */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
         color: #FFFFFF !important;
     }
 
-    /* Dropdown Popover List Styling */
+    /* Target the dropdown popover (the menu that appears after clicking) */
     div[data-baseweb="popover"] {
         background-color: transparent !important;
     }
@@ -65,7 +64,7 @@ st.markdown("""
         color: #A5D8FF !important;
     }
 
-    /* 5. CHAT INPUT: PURE WHITE ON DARK GREY */
+    /* 5. CHAT INPUT: PURE WHITE ON CHARCOAL PILL */
     .stChatInputContainer {
         background-color: transparent !important;
     }
@@ -77,10 +76,10 @@ st.markdown("""
         padding-left: 20px !important;
     }
     .stChatInputContainer p {
-        color: #999 !important; /* Placeholder color */
+        color: #999 !important; /* Placeholder text */
     }
 
-    /* 6. BRAND LOGO: SHINING TITANIUM SHIELD */
+    /* 6. LOGO: SHINING TITANIUM SHIELD */
     .branding-container { 
         text-align: center; 
         margin-bottom: 50px; 
@@ -111,7 +110,7 @@ st.markdown("""
         font-weight: 400; 
     }
 
-    /* 7. CORE STATUS INDICATORS */
+    /* 7. CORE STATUS BOXES (ICE BLUE) */
     .status-base {
         color: #A5D8FF !important;
         border: 1px solid #A5D8FF !important;
@@ -149,16 +148,16 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. SIDEBAR: OPERATING CORE SELECTION
+# 3. SIDEBAR: CORE SELECTION & DESCRIPTORS
 with st.sidebar:
-    # DEFINING THE CORE SPECS TOOLTIP
-    core_tooltip = (
-        "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming.\n\n"
-        "**PRO: 4 CORES**\nBalanced for deep logic. Best for business reasoning.\n\n"
-        "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy."
+    # UPDATED DESCRIPTORS FROM CONVERSATION
+    core_specs = (
+        "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
+        "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
+        "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
     )
     
-    st.markdown("### ENGINE SELECTION", help=core_tooltip)
+    st.markdown("### ENGINE SELECTION", help=core_specs)
     
     selected_mode = st.selectbox(
         "CORE SELECTION",
@@ -169,7 +168,7 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # DYNAMIC STATUS DISPLAY
+    # DYNAMIC BOX UPDATES
     if selected_mode == "Lite": 
         st.markdown("<div class='status-base status-lite'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": 
@@ -179,7 +178,7 @@ with st.sidebar:
     
     st.markdown("<div class='sidebar-footer'>KLUE | COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
-# 4. MAIN BRANDING HEADER
+# 4. BRANDING HEADER
 st.markdown("""
     <div class='branding-container'>
         <div class='logo'>KLUE</div>
@@ -187,69 +186,68 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# 5. OPENROUTER API INITIALIZATION
+# 5. OPENROUTER API LOGIC
 try:
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=st.secrets["OPENROUTER_API_KEY"]
     )
 except Exception:
-    st.error("Missing OPENROUTER_API_KEY in secrets. Please check configuration.")
+    st.error("API Key Missing in Secrets.")
     st.stop()
 
-# 6. CHAT SESSION MANAGEMENT
+# 6. CHAT SESSION ENGINE
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# DISPLAY CHAT HISTORY
+# DISPLAY HISTORY WITH TITANIUM/ICE-BLUE THEME
 for message in st.session_state.messages:
-    # Native icons used for maximum stability and clarity
-    avatar_icon = "🔘" if message["role"] == "assistant" else "👤"
-    with st.chat_message(message["role"], avatar=avatar_icon):
+    avatar_choice = "🔘" if message["role"] == "assistant" else "👤"
+    with st.chat_message(message["role"], avatar=avatar_choice):
         st.markdown(message["content"])
 
-# 7. MASTER SOURCE EXECUTION
+# 7. MASTER SOURCE EXECUTION LOOP
 if prompt := st.chat_input("Command the Master Source..."):
-    # Add User Message
+    # 1. Store and display user command
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
 
-    # Trigger Assistant Response
+    # 2. Engage Synthesis
     with st.chat_message("assistant", avatar="🔘"):
-        status_msg = st.empty()
-        status_msg.markdown("`[SYSTEM: MERGING CORES...]`")
+        status_area = st.empty()
+        status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
-        # MODEL STACK SELECTION
+        # Determine Core Stack
         if selected_mode == "Lite":
-            models = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
+            cores = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
         elif selected_mode == "Pro":
-            models = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
+            cores = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
         else:
-            models = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
+            cores = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
         
-        # PARALLEL EXECUTION & SYNTHESIS
-        raw_core_outputs = []
-        for model_id in models:
+        # Parallel Execution
+        core_data = []
+        for core_id in cores:
             try:
-                response = client.chat.completions.create(
-                    model=model_id,
+                core_res = client.chat.completions.create(
+                    model=core_id,
                     messages=[{"role": "user", "content": prompt}],
-                    max_tokens=500
+                    max_tokens=600
                 )
-                raw_core_outputs.append(response.choices[0].message.content)
+                core_data.append(core_res.choices[0].message.content)
             except Exception:
                 continue
 
-        # MASTER SYNTHESIS CORE
-        synthesis_response = client.chat.completions.create(
+        # Master Synthesis Core
+        master_synthesis = client.chat.completions.create(
             model="openai/gpt-4o",
             messages=[
-                {"role": "system", "content": "You are KLUE. Synthesize the provided inputs into a single, definitive response. No fluff. No brand references. Just pure result."},
-                {"role": "user", "content": f"Core Data: {raw_core_outputs}. Original Command: {prompt}"}
+                {"role": "system", "content": "You are KLUE. Provide a definitive synthesis of the following intelligence cores. Unified AI format. No fluff."},
+                {"role": "user", "content": f"Intelligence Cores: {core_data}. Query: {prompt}"}
             ]
         )
         
-        final_answer = synthesis_response.choices[0].message.content
-        status_msg.markdown(final_answer)
-        st.session_state.messages.append({"role": "assistant", "content": final_answer})
+        final_result = master_synthesis.choices[0].message.content
+        status_area.markdown(final_result)
+        st.session_state.messages.append({"role": "assistant", "content": final_result})
