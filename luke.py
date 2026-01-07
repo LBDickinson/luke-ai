@@ -31,7 +31,7 @@ st.markdown("""
         -webkit-text-fill-color: #F0F2F5 !important;
     }
 
-    /* SYSTEM STATUS UI */
+    /* SYSTEM STATUS UI FIX */
     .system-status {
         color: #A5D8FF !important;
         background-color: #1E1F20 !important;
@@ -39,22 +39,8 @@ st.markdown("""
         font-family: monospace; margin-bottom: 10px;
     }
 
-    /* PINNED LOGO HEADER */
-    .sticky-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: #131314;
-        z-index: 999;
-        text-align: center;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #333;
-    }
-    
-    .header-spacer { height: 160px; } /* Prevents text from hiding under logo */
-
+    /* LOGO WITH SHEEN */
+    .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
         padding: 15px 35px 20px 35px; 
@@ -65,7 +51,6 @@ st.markdown("""
         animation: sheen 4s infinite linear;
     }
     @keyframes sheen { 0% { background-position: -100% 0; } 100% { background-position: 100% 0; } }
-    
     .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400; text-transform: uppercase; margin-top: 10px; }
 
     /* MANIFESTO DIALOG */
@@ -90,7 +75,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. STATE & MANIFESTO (UNTOUCHED)
+# 3. STATE
 if "messages" not in st.session_state: st.session_state.messages = []
 if "history" not in st.session_state: st.session_state.history = []
 
@@ -100,6 +85,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
+# 4. MANIFESTO
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -107,36 +93,47 @@ def show_manifesto():
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
     ---
     **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** ... [Rest of Manifesto Unchanged]
+    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
+    
+    > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
+
+    **2. THE HALLUCINATION FIREWALL**
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**
+    
+    > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+
+    **3. PRECISION OVER SPEED**
+    Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
+    
+    > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
     """)
     if st.button("Close"): st.rerun()
 
-# 4. SIDEBAR (UNTOUCHED)
+# 5. SIDEBAR
 with st.sidebar:
     if st.button("＋ NEW CHAT"): reset_chat(); st.rerun()
     st.markdown("---")
     st.markdown("### RECENT")
-    for i, item in enumerate(reversed(st.session_state.history)):
-        if st.button(item["title"], key=f"hist_{i}"):
-            st.session_state.messages = item["chat"]; st.rerun()
+    if not st.session_state.history:
+        st.caption("No recent activity")
+    else:
+        for i, item in enumerate(reversed(st.session_state.history)):
+            if st.button(item["title"], key=f"hist_{i}"):
+                st.session_state.messages = item["chat"]; st.rerun()
     for _ in range(12): st.sidebar.write("") 
     st.markdown("---")
     if st.button("📖 WHY KLUE?"): show_manifesto()
     selected_mode = st.selectbox("Engine Selection", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
-    st.markdown(f"<div class='status-base'>{selected_mode.upper()} ENGINE ACTIVE</div>", unsafe_allow_html=True)
+    if selected_mode == "Lite": st.markdown("<div class='status-base'>3 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
+    elif selected_mode == "Pro": st.markdown("<div class='status-base' style='box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important;'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
+    else: st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
+    st.markdown("<div style='color:#F0F2F5; font-size:0.65rem; letter-spacing:3px; text-align:center; margin-top:10px; text-transform:uppercase;'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
-# 5. BRANDING (STICKY)
-st.markdown("""
-    <div class='sticky-header'>
-        <div class='logo'>KLUE</div>
-        <div class='logo-sub'>UNIFIED AI</div>
-    </div>
-    <div class='header-spacer'></div>
-    """, unsafe_allow_html=True)
-
+# 6. BRANDING
+st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='logo-sub'>UNIFIED AI</div></div>", unsafe_allow_html=True)
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
-# 6. RUN
+# 7. RUN
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
@@ -149,7 +146,6 @@ if prompt := st.chat_input("Command the Master Source..."):
     with st.chat_message("assistant", avatar=":material/hub:"):
         status_area = st.empty()
         status_area.markdown("<div class='system-status'>[SYSTEM: CONVENING BOARD MEETING...]</div>", unsafe_allow_html=True)
-        # Ensemble Logic Unchanged...
         modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3-haiku"],
                  "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                  "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
