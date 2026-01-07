@@ -18,73 +18,59 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* UNIVERSAL TITANIUM WHITE FORCE */
-    .stApp p, .stApp label, .stApp span, [data-testid="stMarkdownContainer"] p, 
-    [data-testid="stWidgetLabel"] p {
+    /* UNIVERSAL TEXT FORCE (Safe for Icons) */
+    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p {
         color: #F0F2F5 !important;
     }
 
-    /* SELECTBOX VISIBILITY FORCE */
-    div[data-baseweb="select"] > div {
-        color: #F0F2F5 !important;
-        background-color: #262730 !important;
-        border: 1px solid #444 !important;
-    }
+    /* ENGINE SELECTOR WHITE-OUT (Targeting the actual text and labels) */
+    [data-testid="stSidebar"] .stSelectbox label p { color: #F0F2F5 !important; }
+    div[data-baseweb="select"] div { color: #F0F2F5 !important; }
 
-    /* TOOLTIP/HELP TEXT FORCE */
-    div[data-testid="stTooltipContent"] p, div[data-testid="stTooltipContent"] span, div[data-testid="stTooltipContent"] * {
+    /* TOOLTIP/HELP TEXT VISIBILITY */
+    div[data-testid="stTooltipContent"] p, div[data-testid="stTooltipContent"] span {
         color: #F0F2F5 !important;
     }
 
     /* MANIFESTO DIALOG CONTRAST */
-    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3, [data-testid="stDialog"] blockquote {
+    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
     }
 
-    /* ICE BLUE TINT FOR ICONS */
+    /* ICE BLUE TINT FOR ICONS (Restoring detail) */
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
         color: #A5D8FF !important;
     }
-    [data-testid="stWidgetLabel"] svg, [data-testid="collapsedControl"] svg {
+    [data-testid="stWidgetLabel"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR STYLE */
+    /* SIDEBAR: NARROWER DEFAULT & SLIDE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
+        min-width: 260px !important; 
     }
     
-    /* BUTTON STYLING */
-    div.stButton > button {
-        background-color: transparent;
-        border: 1px solid #444;
-        color: #F0F2F5 !important;
-        width: 100%;
-        text-align: left;
-    }
-    div.stButton > button:hover {
-        background-color: #A5D8FF !important;
-        color: #131314 !important;
-    }
-    
-    /* LOGO & TAGLINE */
+    /* LOGO BOX - REINFORCED BORDERS */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
-        padding: 10px 35px 0px 35px; 
+        padding: 15px 35px; 
         background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
         background-size: 200% auto;
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        border-top: 2px solid #555; border-left: 2px solid #555; border-right: 2px solid #555;
+        border: 2px solid #555 !important; /* Force all sides */
+        border-bottom-left-radius: 45px;
+        margin-bottom: 10px;
     }
     .logo-sub {
         color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400;
-        margin-top: -5px; text-transform: uppercase;
+        text-transform: uppercase; margin-top: 5px;
     }
 
-    /* STATUS BOXES & SIDEBAR TAGLINE */
+    /* STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -92,7 +78,7 @@ st.markdown("""
     }
     .sidebar-tagline {
         color: #F0F2F5; font-size: 0.65rem; letter-spacing: 3px; font-weight: 400;
-        text-align: center; margin-top: 10px; text-transform: uppercase; opacity: 0.8;
+        text-align: center; margin-top: 10px; text-transform: uppercase;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -150,8 +136,9 @@ with st.sidebar:
         "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
     )
     
+    # Engine Selection Header (Combined label)
     st.markdown("### Engine Selection", help=core_specs)
-    selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="visible")
+    selected_mode = st.selectbox("Engine Selection", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
     if selected_mode == "Lite": 
         st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
