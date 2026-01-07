@@ -18,57 +18,55 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* UNIVERSAL TEXT FORCE (Specific targeting to avoid washing out icons) */
-    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p {
+    /* 1. UNIVERSAL TEXT & SELECTOR FORCE */
+    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p, .stSelectbox label p {
+        color: #F0F2F5 !important;
+    }
+    
+    /* Force Selectbox value visibility */
+    div[data-baseweb="select"] > div {
+        color: #F0F2F5 !important;
+        background-color: #262730 !important;
+    }
+
+    /* 2. HELP TOOLTIP VISIBILITY */
+    div[data-testid="stTooltipContent"] {
+        background-color: #1E1F20 !important;
+        border: 1px solid #444 !important;
+    }
+    div[data-testid="stTooltipContent"] p, div[data-testid="stTooltipContent"] span {
         color: #F0F2F5 !important;
     }
 
-    /* ENGINE SELECTOR & TOOLTIP FIX */
-    [data-testid="stSidebar"] .stSelectbox label p { color: #F0F2F5 !important; }
-    div[data-baseweb="select"] > div { color: #F0F2F5 !important; }
-    div[data-testid="stTooltipContent"] p { color: #F0F2F5 !important; }
-
-    /* MANIFESTO DIALOG CONTRAST */
+    /* 3. MANIFESTO DIALOG CONTRAST */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
     }
 
-    /* ICE BLUE TINT FOR ASSISTANT ICON */
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
-        color: #A5D8FF !important;
-    }
-    
-    /* SIDEBAR: NARROWER + DRAGGABLE */
+    /* 4. SIDEBAR: NARROWER + COLLAPSIBLE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        min-width: 260px !important; 
+        min-width: 260px !important;
     }
 
-    /* HELP ICON COLOR */
-    [data-testid="stWidgetLabel"] svg {
-        fill: #A5D8FF !important;
-        color: #A5D8FF !important;
-    }
-    
-    /* LOGO BOX - REINFORCED */
+    /* 5. LOGO BOX - REINFORCED */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
-        padding: 15px 35px; 
+        padding: 15px 35px 20px 35px; 
         background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
         background-size: 200% auto;
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         border: 2px solid #555 !important;
         border-bottom-left-radius: 45px;
-        margin-bottom: 10px;
     }
     .logo-sub {
         color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400;
-        text-transform: uppercase; margin-top: 5px;
+        text-transform: uppercase; margin-top: 10px;
     }
 
-    /* STATUS BOXES & TAGLINES */
+    /* 6. STATUS BOXES & TAGLINES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -79,22 +77,15 @@ st.markdown("""
         text-align: center; margin-top: 10px; text-transform: uppercase;
     }
 
-    /* BUTTON STYLING */
-    div.stButton > button {
-        background-color: transparent;
-        border: 1px solid #444;
-        color: #F0F2F5 !important;
-        width: 100%;
-        text-align: left;
-    }
-    div.stButton > button:hover {
-        background-color: #A5D8FF !important;
-        color: #131314 !important;
+    /* 7. ICON COLOR FORCE */
+    [data-testid="stWidgetLabel"] svg {
+        fill: #A5D8FF !important;
+        color: #A5D8FF !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. STATE MANAGEMENT
+# 3. STATE
 if "messages" not in st.session_state: st.session_state.messages = []
 if "history" not in st.session_state: st.session_state.history = []
 
@@ -104,23 +95,21 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO
+# 4. MANIFESTO (Full Text with Write block to prevent truncation)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
-    st.markdown("""
-    ### **Stop Guessing. Move with Certainty.**
-    In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
-    ---
-    **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
-    > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
-    **2. THE HALLUCINATION FIREWALL**
-    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**
-    > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
-    **3. PRECISION OVER SPEED**
-    Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
-    > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
-    """)
+    st.write("### **Stop Guessing. Move with Certainty.**")
+    st.write("In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.")
+    st.write("---")
+    st.write("**1. THE ENSEMBLE ARCHITECTURE**")
+    st.write("**KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level 'Board Meeting' between the world’s most powerful intelligences to ensure your data is scrutinized from every angle.")
+    st.write("> **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**")
+    st.write("**2. THE HALLUCINATION FIREWALL**")
+    st.write("Single AI models are prone to 'Hallucination Patterns'—confident, perfectly phrased fabrications. While one model might misinterpret a fact, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**")
+    st.write("> **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.")
+    st.write("**3. PRECISION OVER SPEED**")
+    st.write("Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk.")
+    st.write("> **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**")
     if st.button("Close"): st.rerun()
 
 # 5. SIDEBAR
@@ -147,6 +136,7 @@ with st.sidebar:
         "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
     )
     
+    # Restored Engine Selection Header
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("Engine Selection", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
