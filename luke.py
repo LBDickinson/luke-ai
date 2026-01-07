@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. THE MASTER REPAIR ENGINE (Strictly for Titanium White and Bottom-Left Pinning)
+# 2. MASTER AESTHETIC ENGINE
 st.markdown("""
     <style>
     [data-testid="stDecoration"] {display: none;}
@@ -18,40 +18,33 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* 1. FORCE TITANIUM WHITE GLOBALLY */
+    /* UNIVERSAL TITANIUM WHITE FORCE */
     .stApp p, .stApp label, .stApp span, [data-testid="stMarkdownContainer"] p, 
     [data-testid="stWidgetLabel"] p, div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
     }
 
-    /* 2. PIN ENGINE SELECTION TO BOTTOM LEFT */
-    /* This creates a fixed-position section at the bottom of the sidebar */
-    [data-testid="stSidebarUserContent"] {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* 3. MANIFESTO DIALOG CONTRAST */
-    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
+    /* MANIFESTO DIALOG CONTRAST */
+    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3, [data-testid="stDialog"] blockquote {
         color: #333333 !important;
     }
 
-    /* 4. ICE BLUE TINT FOR ICONS */
+    /* ICE BLUE TINT FOR ICONS */
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
         color: #A5D8FF !important;
     }
-    [data-testid="stWidgetLabel"] svg {
+    [data-testid="stWidgetLabel"] svg, [data-testid="collapsedControl"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
     }
     
-    /* 5. SIDEBAR STYLE */
+    /* SIDEBAR STYLE & PINNING */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
     
-    /* 6. BUTTON HOVER */
+    /* BUTTON HOVER */
     div.stButton > button {
         background-color: transparent;
         border: 1px solid #444;
@@ -64,7 +57,7 @@ st.markdown("""
         color: #131314 !important;
     }
     
-    /* 7. LOGO */
+    /* LOGO */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -75,7 +68,7 @@ st.markdown("""
         border: 2px solid #555; border-bottom-left-radius: 45px; 
     }
 
-    /* 8. STATUS BOXES */
+    /* STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -94,22 +87,26 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO
+# 4. MANIFESTO (Full Agreed Copy)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
     ### **Stop Guessing. Move with Certainty.**
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
+
     ---
+
     **1. THE ENSEMBLE ARCHITECTURE**
     **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
-    > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
     
+    > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
+
     **2. THE HALLUCINATION FIREWALL**
     Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.** > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
-    
+
     **3. PRECISION OVER SPEED**
     Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
+    
     > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
     """)
     if st.button("Close"): st.rerun()
@@ -127,14 +124,12 @@ with st.sidebar:
             if st.button(item["title"], key=f"hist_{i}"):
                 st.session_state.messages = item["chat"]; st.rerun()
 
-    # FORCE BOTTOM POSITIONING
-    # We use empty markdown lines to push content down; it's the most stable way in Streamlit
+    # Manual push to bottom
     for _ in range(15): st.sidebar.write("") 
     
     st.markdown("---")
     if st.button("📖 WHY KLUE?"): show_manifesto()
     
-    # RESTORED FULL DESCRIPTIONS
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
         "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
@@ -144,9 +139,12 @@ with st.sidebar:
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
-    if selected_mode == "Lite": st.markdown("<div class='status-base'>2 CORES: SPEED</div>", unsafe_allow_html=True)
-    elif selected_mode == "Pro": st.markdown("<div class='status-base' style='box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important;'>4 CORES: DEEP</div>", unsafe_allow_html=True)
-    else: st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER</div>", unsafe_allow_html=True)
+    if selected_mode == "Lite": 
+        st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
+    elif selected_mode == "Pro": 
+        st.markdown("<div class='status-base' style='box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important;'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
+    else: 
+        st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
 
 # 6. BRANDING
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div></div>", unsafe_allow_html=True)
@@ -164,7 +162,7 @@ if prompt := st.chat_input("Command the Master Source..."):
     with st.chat_message("user", avatar=":material/radio_button_checked:"):
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=":material/hub:"):
-        status_area = st.empty(); status_area.markdown("`[SYSTEM: MERGING CORES...]`")
+        status_area = st.empty(); status_area.markdown("`[SYSTEM: CONVENING BOARD MEETING...]`")
         modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
                  "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                  "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
@@ -176,7 +174,7 @@ if prompt := st.chat_input("Command the Master Source..."):
                 core_outputs.append(res.choices[0].message.content)
             except: continue
         master = client.chat.completions.create(model="openai/gpt-4o", 
-            messages=[{"role": "system", "content": "You are KLUE. Provide a definitive synthesis."},
+            messages=[{"role": "system", "content": "Provide THE answer. Verified consensus only."},
                       {"role": "user", "content": f"Data: {core_outputs}. Query: {prompt}"}])
         ans = master.choices[0].message.content
         status_area.markdown(ans); st.session_state.messages.append({"role": "assistant", "content": ans})
