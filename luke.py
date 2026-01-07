@@ -20,7 +20,7 @@ st.markdown("""
     .stApp { background-color: #131314 !important; }
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
-    /* TITANIUM WHITE FORCE */
+    /* TITANIUM WHITE FORCE (Main Chat & Sidebar) */
     [data-testid="stChatMessageContent"] p,
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] label,
@@ -32,6 +32,17 @@ st.markdown("""
         -webkit-text-fill-color: #F0F2F5 !important;
     }
 
+    /* SYSTEM STATUS MESSAGE FIX (Prevent White-on-White) */
+    .system-status {
+        color: #A5D8FF !important;
+        background-color: #1E1F20 !important;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #333;
+        font-family: monospace;
+        margin-bottom: 10px;
+    }
+
     /* TOOLTIP FIX */
     div[data-testid="stTooltipContent"] {
         background-color: #1E1F20 !important;
@@ -41,7 +52,7 @@ st.markdown("""
         color: #F0F2F5 !important;
     }
 
-    /* MANIFESTO DIALOG FORCE (JET BLACK ON LIGHT) */
+    /* MANIFESTO DIALOG FORCE */
     [data-testid="stDialog"] div, [data-testid="stDialog"] p, [data-testid="stDialog"] h3, 
     [data-testid="stDialog"] b, [data-testid="stDialog"] li, [data-testid="stDialog"] blockquote {
         color: #111111 !important;
@@ -67,32 +78,18 @@ st.markdown("""
     }
     div.stButton > button:hover { background-color: #A5D8FF !important; color: #131314 !important; }
     
-    /* LOGO WITH LIGHTING SHEEN EFFECT */
+    /* LOGO WITH SHEEN */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
         padding: 15px 35px 20px 35px; 
-        background: linear-gradient(
-            to right, 
-            #8E9EAB 0%, 
-            #8E9EAB 40%, 
-            #A5D8FF 50%, 
-            #8E9EAB 60%, 
-            #8E9EAB 100%
-        );
+        background: linear-gradient(to right, #8E9EAB 0%, #8E9EAB 40%, #A5D8FF 50%, #8E9EAB 60%, #8E9EAB 100%);
         background-size: 200% auto;
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; 
-        border: 2px solid #555 !important;
-        border-bottom-left-radius: 45px;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        border: 2px solid #555 !important; border-bottom-left-radius: 45px;
         animation: sheen 4s infinite linear;
     }
-
-    @keyframes sheen {
-        0% { background-position: -100% 0; }
-        100% { background-position: 100% 0; }
-    }
-
+    @keyframes sheen { 0% { background-position: -100% 0; } 100% { background-position: 100% 0; } }
     .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400; text-transform: uppercase; margin-top: 10px; }
 
     /* STATUS BOXES */
@@ -114,7 +111,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (FULL RESTORED VERSION)
+# 4. MANIFESTO
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -175,13 +172,7 @@ with st.sidebar:
     st.markdown("<div style='color:#F0F2F5; font-size:0.65rem; letter-spacing:3px; text-align:center; margin-top:10px; text-transform:uppercase;'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 6. BRANDING
-st.markdown("""
-    <div class='branding-container'>
-        <div class='logo'>KLUE</div>
-        <div class='logo-sub'>UNIFIED AI</div>
-    </div>
-    """, unsafe_allow_html=True)
-
+st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='logo-sub'>UNIFIED AI</div></div>", unsafe_allow_html=True)
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
 # 7. DISPLAY
@@ -196,7 +187,10 @@ if prompt := st.chat_input("Command the Master Source..."):
     with st.chat_message("user", avatar=":material/radio_button_checked:"):
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=":material/hub:"):
-        status_area = st.empty(); status_area.markdown("`[SYSTEM: CONVENING BOARD MEETING...]`")
+        status_area = st.empty()
+        # SYSTEM STATUS UI REINFORCED
+        status_area.markdown("<div class='system-status'>[SYSTEM: CONVENING BOARD MEETING...]</div>", unsafe_allow_html=True)
+        
         modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3-haiku"],
                  "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                  "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
