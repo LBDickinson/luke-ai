@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. MASTER AESTHETIC ENGINE (Locked v7.3 Styles & Labels)
+# 2. MASTER AESTHETIC ENGINE
 st.markdown("""
     <style>
     [data-testid="stDecoration"] {display: none;}
@@ -18,11 +18,17 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* TITANIUM WHITE FORCE */
-    [data-testid="stChatMessageContent"] p, .stMarkdown p, [data-testid="stDialog"] p, label {
+    /* TITANIUM WHITE FORCE (General) */
+    [data-testid="stChatMessageContent"] p, .stMarkdown p, label {
         color: #F0F2F5 !important;
         font-size: 1.05rem;
         line-height: 1.6;
+    }
+
+    /* MANIFESTO DIALOG: DARKER TEXT FOR READABILITY */
+    [data-testid="stDialog"] p, [data-testid="stDialog"] li {
+        color: #C1C7CD !important; /* Darker, more solid contrast */
+        font-weight: 500;
     }
 
     /* ICE BLUE TINT FOR KLUE HUB ICON */
@@ -30,12 +36,19 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR STYLING */
+    /* SIDEBAR: WIDER DEFAULT & STYLE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
+        min-width: 350px !important; /* Widened to keep help icon in line */
     }
     [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
+
+    /* BRIGHTER HELP ICON */
+    [data-testid="stWidgetLabel"] svg {
+        color: #FFFFFF !important;
+        filter: brightness(1.5);
+    }
     
     /* LOGO */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
@@ -61,7 +74,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. PRO POP-UP WINDOW (The Certainty Manifesto)
+# 3. PRO POP-UP WINDOW (Manifesto)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -82,7 +95,7 @@ def show_manifesto():
     if st.button("Close"):
         st.rerun()
 
-# 4. SIDEBAR (Restored Locked Labels & Help)
+# 4. SIDEBAR
 with st.sidebar:
     st.markdown("### Strategic Oversight")
     if st.button("📖 WHY KLUE?"):
@@ -115,7 +128,7 @@ except:
 
 if "messages" not in st.session_state: st.session_state.messages = []
 
-# 7. CHAT DISPLAY (Pulse & Hub)
+# 7. CHAT DISPLAY
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
