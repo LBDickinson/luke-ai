@@ -18,17 +18,14 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* TITANIUM WHITE FORCE */
-    [data-testid="stChatMessageContent"] p, .stMarkdown p, label {
+    /* UNIVERSAL TITANIUM WHITE FORCE - Target everything specifically */
+    .stApp p, .stApp label, .stApp span, .stApp div, [data-testid="stMarkdownContainer"] p {
         color: #F0F2F5 !important;
-        font-size: 1.05rem;
-        line-height: 1.6;
     }
 
-    /* MANIFESTO DIALOG: HIGH-CONTRAST CHARCOAL */
-    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
+    /* MANIFESTO DIALOG: MUST REMAIN DARK FOR READABILITY ON LIGHT MODAL */
+    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3, [data-testid="stDialog"] span {
         color: #333333 !important;
-        font-weight: 600;
     }
 
     /* ICE BLUE TINT FOR KLUE HUB ICON */
@@ -36,23 +33,20 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR: MANUAL RESIZE ENABLED + FLEXBOX PINNING */
+    /* SIDEBAR: REMOVING HARD WIDTHS TO RESTORE NATIVE COLLAPSE/RESIZE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        min-width: 280px !important; /* Minimum to keep icons aligned */
-        max-width: 500px !important; /* Allows you to drag and widen it */
     }
 
-    /* PINNING LOGIC: Push bottom section down */
-    [data-testid="stSidebarUserContent"] {
+    /* PUSH ENGINE SELECTION TO BOTTOM WITHOUT BREAKING LAYOUT */
+    div[data-testid="stSidebarUserContent"] {
         display: flex;
         flex-direction: column;
         height: 95vh;
     }
-    .bottom-anchor {
-        margin-top: auto;
-        padding-bottom: 20px;
+    .spacer {
+        flex-grow: 1;
     }
 
     /* FORCE HELP ICON TO ICE BLUE */
@@ -61,18 +55,16 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* BUTTON STYLING & HOVER */
+    /* BUTTON STYLING */
     div.stButton > button {
         background-color: transparent;
         border: 1px solid #444;
-        color: #F0F2F5;
+        color: #F0F2F5 !important;
         width: 100%;
         text-align: left;
-        transition: all 0.3s ease;
     }
     div.stButton > button:hover {
         background-color: #A5D8FF !important;
-        border-color: #A5D8FF !important;
         color: #131314 !important;
     }
     
@@ -93,8 +85,6 @@ st.markdown("""
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
         text-align: center; letter-spacing: 2px; margin-top: 15px;
     }
-    .status-pro { box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important; }
-    .status-meta { border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6); }
     </style>
     """, unsafe_allow_html=True)
 
@@ -108,7 +98,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. PRO POP-UP WINDOW (Manifesto)
+# 4. PRO POP-UP WINDOW
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -130,11 +120,8 @@ def show_manifesto():
 
 # 5. SIDEBAR
 with st.sidebar:
-    # TOP SECTION
     if st.button("＋ NEW CHAT"):
-        reset_chat()
-        st.rerun()
-    
+        reset_chat(); st.rerun()
     st.markdown("---")
     st.markdown("### RECENT")
     if not st.session_state.history:
@@ -142,14 +129,13 @@ with st.sidebar:
     else:
         for i, item in enumerate(reversed(st.session_state.history)):
             if st.button(item["title"], key=f"hist_{i}"):
-                st.session_state.messages = item["chat"]
-                st.rerun()
+                st.session_state.messages = item["chat"]; st.rerun()
 
-    # BOTTOM ANCHOR (Engine Selection)
-    st.markdown('<div class="bottom-anchor">', unsafe_allow_html=True)
+    # The Spacer pushes the next elements to the bottom
+    st.markdown('<div class="spacer"></div>', unsafe_allow_html=True)
+    
     st.markdown("---")
-    if st.button("📖 WHY KLUE?"):
-        show_manifesto()
+    if st.button("📖 WHY KLUE?"): show_manifesto()
     
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
@@ -161,9 +147,8 @@ with st.sidebar:
     selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
     if selected_mode == "Lite": st.markdown("<div class='status-base'>2 CORES: SPEED</div>", unsafe_allow_html=True)
-    elif selected_mode == "Pro": st.markdown("<div class='status-base status-pro'>4 CORES: DEEP</div>", unsafe_allow_html=True)
-    else: st.markdown("<div class='status-base status-meta'>5 CORES: MASTER</div>", unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    elif selected_mode == "Pro": st.markdown("<div class='status-base' style='box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4); border: 2px solid #A5D8FF !important;'>4 CORES: DEEP</div>", unsafe_allow_html=True)
+    else: st.markdown("<div class='status-base' style='border: 2px solid #FFFFFF !important; box-shadow: 0px 0px 25px rgba(165, 216, 255, 0.6);'>5 CORES: MASTER</div>", unsafe_allow_html=True)
 
 # 6. BRANDING & CLIENT
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div></div>", unsafe_allow_html=True)
@@ -180,29 +165,20 @@ if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar=":material/radio_button_checked:"):
         st.markdown(prompt)
-
     with st.chat_message("assistant", avatar=":material/hub:"):
-        status_area = st.empty()
-        status_area.markdown("`[SYSTEM: MERGING CORES...]`")
-        
+        status_area = st.empty(); status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5"],
                  "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                  "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
         cores = modes[selected_mode]
-        
         core_outputs = []
         for c in cores:
             try:
                 res = client.chat.completions.create(model=c, messages=[{"role": "user", "content": prompt}], max_tokens=600)
                 core_outputs.append(res.choices[0].message.content)
             except: continue
-
-        master = client.chat.completions.create(
-            model="openai/gpt-4o",
+        master = client.chat.completions.create(model="openai/gpt-4o", 
             messages=[{"role": "system", "content": "You are KLUE. Provide a definitive synthesis."},
-                      {"role": "user", "content": f"Intelligence Data: {core_outputs}. Command: {prompt}"}]
-        )
-        
+                      {"role": "user", "content": f"Data: {core_outputs}. Query: {prompt}"}])
         ans = master.choices[0].message.content
-        status_area.markdown(ans)
-        st.session_state.messages.append({"role": "assistant", "content": ans})
+        status_area.markdown(ans); st.session_state.messages.append({"role": "assistant", "content": ans})
