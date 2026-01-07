@@ -4,20 +4,29 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Master Aesthetic (Charcoal, Ice Blue, and Shining Titanium)
+# 2. Master Aesthetic + Visibility Fixes
 st.markdown("""
     <style>
-    header {visibility: hidden;}
-    [data-testid="stHeader"] {display: none;}
+    /* 1. HIDE DEFAULTS BUT REVEAL THE SIDEBAR TOGGLE */
+    [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
 
+    /* 2. MAKE THE COLLAPSED SIDEBAR ARROW VISIBLE */
+    button[data-testid="stBaseButton-headerNoPadding"] svg {
+        fill: #FFFFFF !important;
+        color: #FFFFFF !important;
+        width: 30px;
+        height: 30px;
+    }
+
+    /* 3. GLOBAL THEME (Gemini Charcoal) */
     .stApp { 
         background-color: #131314; 
         color: #E3E3E3; 
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Sidebar Legibility */
+    /* SIDEBAR LEGIBILITY */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
@@ -29,44 +38,22 @@ st.markdown("""
 
     .block-container { max-width: 800px; padding-top: 2rem !important; }
 
-    /* LOGO: SHINING TITANIUM WITH CUSTOM ARCHITECTURAL CORNER */
+    /* LOGO: SHINING TITANIUM + ARCHITECTURAL CORNER */
     .branding-container { text-align: center; margin-bottom: 50px; }
-    
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
         padding: 12px 30px; 
-        
-        /* Metallic Shine Gradient */
-        background: linear-gradient(
-            135deg, 
-            #8E9EAB 0%, 
-            #FFFFFF 50%, 
-            #8E9EAB 100%
-        );
+        background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
         background-size: 200% auto;
         -webkit-background-clip: text; 
         -webkit-text-fill-color: transparent; 
-        
-        /* Box with Bottom-Left Rounded Edge */
         border: 1px solid #555;
         border-bottom-left-radius: 40px; 
-        
-        /* Shimmer Animation */
         animation: shine 6s linear infinite;
     }
-    
-    @keyframes shine {
-        to { background-position: 200% center; }
-    }
+    @keyframes shine { to { background-position: 200% center; } }
 
-    .tagline { 
-        color: #888888; 
-        font-size: 0.8rem; 
-        letter-spacing: 10px; 
-        margin-top: 20px; 
-        text-transform: uppercase;
-        font-weight: 300;
-    }
+    .tagline { color: #888888; font-size: 0.8rem; letter-spacing: 10px; margin-top: 20px; text-transform: uppercase; font-weight: 300; }
 
     /* MERGED INTELLIGENCE - ICE BLUE STATUS */
     .merged-status {
@@ -81,7 +68,7 @@ st.markdown("""
         letter-spacing: 1px;
     }
 
-    /* Input Pill Styling */
+    /* INPUT PILL */
     .stChatInputContainer > div {
         background-color: #1E1F20 !important;
         border: 1px solid #3C4043 !important;
@@ -116,7 +103,7 @@ with st.sidebar:
     else: 
         st.warning("META: EXECUTIVE SYNTHESIS")
         
-    st.caption("KLUE v4.4 / THE MASTER SOURCE")
+    st.caption("KLUE v4.5 / THE MASTER SOURCE")
 
 # 4. Header
 st.markdown(f"""
