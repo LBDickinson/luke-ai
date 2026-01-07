@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. MASTER AESTHETIC ENGINE (The v7.2 "Titanium White" Build)
+# 2. MASTER AESTHETIC ENGINE (v7.3 - Ice Blue Identity)
 st.markdown("""
     <style>
     /* 1. INTERFACE CLEANUP */
@@ -24,22 +24,25 @@ st.markdown("""
         font-family: 'Segoe UI', sans-serif;
     }
     
-    /* TARGETING CHAT TEXT: Soft Titanium White (#F0F2F5) */
-    /* This is slightly brighter than Gemini but softer than pure white */
+    /* CHAT TEXT: Soft Titanium White (#F0F2F5) */
     [data-testid="stChatMessageContent"] p {
         color: #F0F2F5 !important;
         font-size: 1.05rem;
         line-height: 1.6;
-        font-weight: 400;
     }
 
-    /* 3. SIDEBAR: HIGH-CONTRAST CONTROL PANEL */
+    /* 3. ICON STYLING: ICE BLUE FOR KLUE */
+    /* This targets the Material Symbol for the Assistant only */
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
+        color: #A5D8FF !important;
+    }
+    
+    /* 4. SIDEBAR: HIGH-CONTRAST CONTROL PANEL */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
     
-    /* FORCE SIDEBAR LABELS TO PURE WHITE FOR VISIBILITY */
     [data-testid="stSidebar"] h3 {
         color: #FFFFFF !important;
         letter-spacing: 2px !important;
@@ -48,32 +51,22 @@ st.markdown("""
         font-weight: 800 !important;
     }
 
-    /* FORCE TOOLTIP (?) ICON TO BRIGHT WHITE */
     [data-testid="stSidebar"] svg {
         fill: #FFFFFF !important;
         color: #FFFFFF !important;
-        opacity: 1 !important;
     }
     
-    /* 4. SELECTOR MENU: DARK SURFACES */
+    /* 5. SELECTOR MENU: DARK SURFACES */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
         color: #FFFFFF !important;
     }
-    div[data-baseweb="popover"] {
-        background-color: #262730 !important;
-    }
-    div[role="option"] {
-        background-color: #262730 !important;
-        color: #FFFFFF !important;
-    }
-    div[role="option"]:hover {
-        background-color: #3D3E47 !important;
-        color: #A5D8FF !important;
-    }
+    div[data-baseweb="popover"] { background-color: #262730 !important; }
+    div[role="option"] { background-color: #262730 !important; color: #FFFFFF !important; }
+    div[role="option"]:hover { background-color: #3D3E47 !important; color: #A5D8FF !important; }
 
-    /* 5. CHAT INPUT: INTEGRATED DARK DESIGN */
+    /* 6. CHAT INPUT: INTEGRATED DARK DESIGN */
     .stChatInputContainer textarea {
         background-color: #1E1F20 !important;
         color: #F0F2F5 !important;
@@ -81,7 +74,7 @@ st.markdown("""
         border-radius: 28px !important;
     }
 
-    /* 6. LOGO: TITANIUM SHINE ANIMATION */
+    /* 7. LOGO: TITANIUM SHINE */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -94,9 +87,9 @@ st.markdown("""
         animation: logo-shine 8s linear infinite;
     }
     @keyframes logo-shine { to { background-position: 200% center; } }
-    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 400; opacity: 0.9; }
+    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; }
 
-    /* 7. CORE STATUS BOXES */
+    /* 8. CORE STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -109,7 +102,6 @@ st.markdown("""
 
 # 3. SIDEBAR: OPERATING CORE SELECTION
 with st.sidebar:
-    # CORE DESCRIPTORS
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
         "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
@@ -117,25 +109,15 @@ with st.sidebar:
     )
     
     st.markdown("### Engine Selection", help=core_specs)
-    
-    selected_mode = st.selectbox(
-        "CORE SELECTION",
-        ["Lite", "Pro", "Meta"],
-        index=1,
-        label_visibility="collapsed"
-    )
-    
+    selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     st.markdown("---")
     
-    # STATUS INDICATORS
     if selected_mode == "Lite": 
         st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": 
         st.markdown("<div class='status-base status-pro'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
     else: 
         st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
-    
-    st.markdown("<br><br><div style='color:white; font-size:0.7rem; text-align:center; letter-spacing:2px; opacity:0.6;'>KLUE | COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 4. BRANDING HEADER
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='tagline'>Unified AI</div></div>", unsafe_allow_html=True)
@@ -144,35 +126,33 @@ st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div cl
 try:
     client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 except:
-    st.error("API Key Missing. Check your secrets file.")
+    st.error("API Key Missing in Secrets.")
     st.stop()
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 6. CHAT DISPLAY (Material Symbols: Hub & Terminal)
+# 6. CHAT DISPLAY (Ice Blue Hub & Pulse)
 for message in st.session_state.messages:
-    avatar_icon = ":material/hub:" if message["role"] == "assistant" else ":material/terminal:"
+    # KLUE = hub, User = radio_button_checked (The Pulse)
+    avatar_icon = ":material/hub:" if message["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(message["role"], avatar=avatar_icon):
         st.markdown(message["content"])
 
 # 7. EXECUTION
 if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar=":material/terminal:"):
+    with st.chat_message("user", avatar=":material/radio_button_checked:"):
         st.markdown(prompt)
 
     with st.chat_message("assistant", avatar=":material/hub:"):
         status_area = st.empty()
         status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
-        # CORE LOGIC
-        if selected_mode == "Lite":
-            cores = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
-        elif selected_mode == "Pro":
-            cores = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
-        else:
-            cores = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
+        # Logic for Core selection and API calls remain identical to v7.2...
+        if selected_mode == "Lite": cores = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
+        elif selected_mode == "Pro": cores = ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"]
+        else: cores = ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]
         
         core_outputs = []
         for c in cores:
@@ -181,7 +161,6 @@ if prompt := st.chat_input("Command the Master Source..."):
                 core_outputs.append(res.choices[0].message.content)
             except: continue
 
-        # MASTER SYNTHESIS
         master = client.chat.completions.create(
             model="openai/gpt-4o",
             messages=[
