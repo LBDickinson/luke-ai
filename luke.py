@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. MASTER AESTHETIC ENGINE (v7.3 Base + Pro Popup Styling)
+# 2. MASTER AESTHETIC ENGINE (Locked v7.3 Styles & Labels)
 st.markdown("""
     <style>
     [data-testid="stDecoration"] {display: none;}
@@ -18,8 +18,8 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* TITANIUM WHITE TEXT FORCE */
-    [data-testid="stChatMessageContent"] p, .stMarkdown p, [data-testid="stDialog"] p {
+    /* TITANIUM WHITE FORCE */
+    [data-testid="stChatMessageContent"] p, .stMarkdown p, [data-testid="stDialog"] p, label {
         color: #F0F2F5 !important;
         font-size: 1.05rem;
         line-height: 1.6;
@@ -70,6 +70,7 @@ def show_manifesto():
     
     **1. THE ENSEMBLE ARCHITECTURE**
     **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** We trigger a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
+    
     *The Result:* You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
     
     **2. THE HALLUCINATION FIREWALL**
@@ -81,13 +82,22 @@ def show_manifesto():
     if st.button("Close"):
         st.rerun()
 
-# 4. SIDEBAR
+# 4. SIDEBAR (Restored Locked Labels & Help)
 with st.sidebar:
     st.markdown("### Strategic Oversight")
     if st.button("📖 WHY KLUE?"):
         show_manifesto()
+    
     st.markdown("---")
-    selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1)
+    
+    core_specs = (
+        "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
+        "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
+        "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
+    )
+    
+    st.markdown("### Engine Selection", help=core_specs)
+    selected_mode = st.selectbox("CORE SELECTION", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
     if selected_mode == "Lite": st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": st.markdown("<div class='status-base status-pro'>4 CORES: DEEP RESPONSE</div>", unsafe_allow_html=True)
@@ -105,7 +115,7 @@ except:
 
 if "messages" not in st.session_state: st.session_state.messages = []
 
-# 7. CHAT DISPLAY
+# 7. CHAT DISPLAY (Pulse & Hub)
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
@@ -135,8 +145,8 @@ if prompt := st.chat_input("Command the Master Source..."):
 
         master = client.chat.completions.create(
             model="openai/gpt-4o",
-            messages=[{"role": "system", "content": "Provide THE answer. Verified consensus only."},
-                      {"role": "user", "content": f"Data: {core_outputs}. Query: {prompt}"}]
+            messages=[{"role": "system", "content": "You are KLUE. Provide a definitive synthesis. Master intelligence mode."},
+                      {"role": "user", "content": f"Intelligence Data: {core_outputs}. Command: {prompt}"}]
         )
         
         ans = master.choices[0].message.content
