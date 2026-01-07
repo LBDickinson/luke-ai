@@ -20,12 +20,21 @@ st.markdown("""
     .stApp { background-color: #131314 !important; }
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
-    /* TITANIUM WHITE FORCE - Targeted to avoid container white-out */
-    [data-testid="stSidebar"] .stMarkdown p, 
+    /* TARGETED TITANIUM WHITE FORCE */
+    /* This hits the 'RECENT' header and 'Engine Selection' label specifically */
+    [data-testid="stSidebar"] h3, 
     [data-testid="stSidebar"] label,
-    [data-testid="stWidgetLabel"] p,
+    [data-testid="stSidebar"] .stMarkdown p,
+    [data-testid="stWidgetLabel"] p {
+        color: #F0F2F5 !important;
+        opacity: 1 !important;
+    }
+
+    /* SELECTOR BOX TEXT FORCE (Fixes grey text inside the box) */
+    div[data-baseweb="select"] div, 
     div[data-baseweb="select"] span {
         color: #F0F2F5 !important;
+        opacity: 1 !important;
     }
 
     /* COLLAPSE ARROWS - FORCE WHITE */
@@ -34,13 +43,13 @@ st.markdown("""
         color: #F0F2F5 !important;
     }
 
-    /* SELECTOR BOX FIX */
+    /* SELECTOR BOX CONTAINER STYLE */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
     }
 
-    /* BUTTONS - PREVENT WHITE OUT & FORCE STYLE */
+    /* BUTTONS STYLE */
     div.stButton > button {
         background-color: transparent !important;
         border: 1px solid #444 !important;
@@ -53,7 +62,7 @@ st.markdown("""
         color: #131314 !important;
     }
     
-    /* LOGO BOX - REINFORCED ALL SIDES */
+    /* LOGO BOX - REINFORCED */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -79,9 +88,9 @@ st.markdown("""
         color: #A5D8FF !important;
     }
 
-    /* MANIFESTO TEXT COLOR FORCE (Inside Dialog) */
+    /* MANIFESTO DIALOG CONTRAST */
     .manifesto-text { color: #1E1E1E !important; }
-    .manifesto-text p, .manifesto-text h3, .manifesto-text b { color: #1E1E1E !important; }
+    .manifesto-text p, .manifesto-text h3, .manifesto-text b, .manifesto-text li { color: #1E1E1E !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -95,7 +104,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Agreed Copy - Forced Contrast)
+# 4. MANIFESTO (Full Agreed Copy)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -168,7 +177,7 @@ st.markdown("""
 
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
-# 7. DISPLAY
+# 7. CHAT DISPLAY
 for msg in st.session_state.messages:
     icon = ":material/hub:" if msg["role"] == "assistant" else ":material/radio_button_checked:"
     with st.chat_message(msg["role"], avatar=icon):
