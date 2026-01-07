@@ -18,42 +18,40 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* UNIVERSAL TEXT FORCE (Safe for Icons) */
+    /* UNIVERSAL TEXT FORCE (Specific targeting to avoid washing out icons) */
     .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p {
         color: #F0F2F5 !important;
     }
 
-    /* ENGINE SELECTOR WHITE-OUT (Targeting the actual text and labels) */
+    /* ENGINE SELECTOR & TOOLTIP FIX */
     [data-testid="stSidebar"] .stSelectbox label p { color: #F0F2F5 !important; }
-    div[data-baseweb="select"] div { color: #F0F2F5 !important; }
-
-    /* TOOLTIP/HELP TEXT VISIBILITY */
-    div[data-testid="stTooltipContent"] p, div[data-testid="stTooltipContent"] span {
-        color: #F0F2F5 !important;
-    }
+    div[data-baseweb="select"] > div { color: #F0F2F5 !important; }
+    div[data-testid="stTooltipContent"] p { color: #F0F2F5 !important; }
 
     /* MANIFESTO DIALOG CONTRAST */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
     }
 
-    /* ICE BLUE TINT FOR ICONS (Restoring detail) */
+    /* ICE BLUE TINT FOR ASSISTANT ICON */
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) span {
         color: #A5D8FF !important;
     }
-    [data-testid="stWidgetLabel"] svg {
-        fill: #A5D8FF !important;
-        color: #A5D8FF !important;
-    }
     
-    /* SIDEBAR: NARROWER DEFAULT & SLIDE */
+    /* SIDEBAR: NARROWER + DRAGGABLE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
         min-width: 260px !important; 
     }
+
+    /* HELP ICON COLOR */
+    [data-testid="stWidgetLabel"] svg {
+        fill: #A5D8FF !important;
+        color: #A5D8FF !important;
+    }
     
-    /* LOGO BOX - REINFORCED BORDERS */
+    /* LOGO BOX - REINFORCED */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -61,7 +59,7 @@ st.markdown("""
         background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
         background-size: 200% auto;
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        border: 2px solid #555 !important; /* Force all sides */
+        border: 2px solid #555 !important;
         border-bottom-left-radius: 45px;
         margin-bottom: 10px;
     }
@@ -70,7 +68,7 @@ st.markdown("""
         text-transform: uppercase; margin-top: 5px;
     }
 
-    /* STATUS BOXES */
+    /* STATUS BOXES & TAGLINES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
@@ -80,10 +78,23 @@ st.markdown("""
         color: #F0F2F5; font-size: 0.65rem; letter-spacing: 3px; font-weight: 400;
         text-align: center; margin-top: 10px; text-transform: uppercase;
     }
+
+    /* BUTTON STYLING */
+    div.stButton > button {
+        background-color: transparent;
+        border: 1px solid #444;
+        color: #F0F2F5 !important;
+        width: 100%;
+        text-align: left;
+    }
+    div.stButton > button:hover {
+        background-color: #A5D8FF !important;
+        color: #131314 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. STATE
+# 3. STATE MANAGEMENT
 if "messages" not in st.session_state: st.session_state.messages = []
 if "history" not in st.session_state: st.session_state.history = []
 
@@ -93,7 +104,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Agreed Copy)
+# 4. MANIFESTO
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -136,7 +147,6 @@ with st.sidebar:
         "**META: 5 CORES**\nFull-power master synthesis. Best for high-stakes accuracy and definitive results."
     )
     
-    # Engine Selection Header (Combined label)
     st.markdown("### Engine Selection", help=core_specs)
     selected_mode = st.selectbox("Engine Selection", ["Lite", "Pro", "Meta"], index=1, label_visibility="collapsed")
     
