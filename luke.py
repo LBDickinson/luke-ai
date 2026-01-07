@@ -4,85 +4,110 @@ from openai import OpenAI
 # 1. System Config
 st.set_page_config(page_title="KLUE", page_icon="🔘", layout="centered")
 
-# 2. Nuclear CSS - Arrow and Text Visibility
+# 2. Master Aesthetic & Contrast Overrides
 st.markdown("""
     <style>
+    /* 1. HIDE DEFAULTS */
     header {visibility: hidden !important;}
     [data-testid="stHeader"] {display: none !important;}
     footer {visibility: hidden !important;}
 
-    /* THE NUCLEAR ARROW FIX */
-    /* Targets the button even when sidebar is collapsed */
-    button[kind="headerNoPadding"] svg, 
-    .st-emotion-cache-p5msec svg,
-    [data-testid="collapsedControl"] svg {
-        fill: #FFFFFF !important;
-        color: #FFFFFF !important;
-        stroke: #FFFFFF !important;
-        width: 40px !important;
-        height: 40px !important;
-        filter: drop-shadow(0px 0px 8px rgba(255,255,255,1)) !important;
-        animation: pulse 2s infinite !important;
+    /* 2. THE CONTROL HUB: CONTRASTED CIRCLE BEHIND THE ARROW */
+    /* This targets the sidebar toggle button area specifically */
+    button[kind="headerNoPadding"] {
+        background-color: #A5D8FF !important; /* Ice Blue Circle */
+        border-radius: 50% !important;
+        width: 45px !important;
+        height: 45px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: fixed !important;
+        top: 15px !important;
+        left: 15px !important;
+        z-index: 999999 !important;
+        box-shadow: 0px 0px 15px rgba(165, 216, 255, 0.4) !important;
     }
 
-    @keyframes pulse {
-        0% { transform: scale(1); opacity: 0.8; }
-        50% { transform: scale(1.1); opacity: 1; }
-        100% { transform: scale(1); opacity: 0.8; }
+    /* FORCE ARROW TO BE BLACK ON ICE BLUE CIRCLE FOR MAXIMUM CONTRAST */
+    button[kind="headerNoPadding"] svg {
+        fill: #131314 !important;
+        color: #131314 !important;
+        width: 25px !important;
+        height: 25px !important;
     }
 
-    /* GLOBAL THEME */
-    .stApp { background-color: #131314; color: #FFFFFF !important; }
+    /* 3. GLOBAL THEME (Gemini Charcoal) */
+    .stApp { 
+        background-color: #131314; 
+        color: #FFFFFF !important; 
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-    /* SIDEBAR TEXT - FORCED WHITE */
-    [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333; }
-    
-    /* Target every text-bearing element in the sidebar */
-    [data-testid="stSidebar"] * {
+    /* 4. SIDEBAR TEXT FORCE-BRIGHT */
+    [data-testid="stSidebar"] {
+        background-color: #1E1F20 !important;
+        border-right: 1px solid #333333;
+    }
+    /* Force ALL text in sidebar to be high-contrast white */
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] .stMarkdown,
+    [data-testid="stSidebar"] div {
         color: #FFFFFF !important;
         font-weight: 600 !important;
-    }
-    
-    /* Specific fix for selectbox text which can be stubborn */
-    div[data-baseweb="select"] > div {
-        color: #FFFFFF !important;
-        background-color: #262730 !important;
+        opacity: 1 !important;
     }
 
-    .block-container { max-width: 800px; padding-top: 2rem !important; }
+    .block-container { max-width: 800px; padding-top: 2.5rem !important; }
 
-    /* LOGO: SHINING TITANIUM SHIELD */
+    /* 5. LOGO: SHINING TITANIUM SHIELD */
     .branding-container { text-align: center; margin-bottom: 50px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
-        padding: 15px 35px; background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
-        background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        border: 2px solid #555; border-bottom-left-radius: 45px; 
-        filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6)); animation: shine 8s linear infinite;
+        padding: 15px 35px; 
+        background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        border: 2px solid #555;
+        border-bottom-left-radius: 45px; 
+        filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6));
+        animation: shine 8s linear infinite;
     }
     @keyframes shine { to { background-position: 200% center; } }
-    .tagline { color: #BBBBBB !important; font-size: 0.85rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; }
+    .tagline { color: #BBBBBB !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; }
 
-    /* ICE BLUE STATUS */
+    /* 6. ICE BLUE STATUS BOX */
     .unified-status {
-        color: #A5D8FF !important; border: 2px solid #A5D8FF !important;
-        padding: 12px; border-radius: 8px; background-color: rgba(165, 216, 255, 0.1) !important;
-        font-size: 0.85rem; font-weight: 700 !important; text-align: center;
+        color: #A5D8FF !important;
+        border: 2px solid #A5D8FF !important;
+        padding: 12px;
+        border-radius: 8px;
+        background-color: rgba(165, 216, 255, 0.1) !important;
+        font-size: 0.85rem;
+        font-weight: 700 !important;
+        text-align: center;
     }
 
-    /* INPUT PILL */
-    .stChatInputContainer > div { background-color: #1E1F20 !important; border: 1px solid #555 !important; border-radius: 28px !important; }
+    /* 7. INPUT PILL STYLING */
+    .stChatInputContainer > div {
+        background-color: #1E1F20 !important;
+        border: 1px solid #555 !important;
+        border-radius: 28px !important;
+    }
     textarea { color: #FFFFFF !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Sidebar
+# 3. Sidebar Hierarchy
 with st.sidebar:
     st.markdown("### SYSTEM HIERARCHY")
     mode_help = (
-        "**Lite:** 2 Engines. Creative flow.\n\n"
-        "**Unified:** 4 Engines. Business logic.\n\n"
-        "**Meta:** 5 Engines. Master Deep Search."
+        "**Lite:** 2 Rapid Engines. Brief tasks.\n\n"
+        "**Unified:** 4 Engines. Integrated business logic.\n\n"
+        "**Meta:** 5 Pro-Tier Engines. Deep Search and one-shot accuracy."
     )
     selected_mode = st.selectbox("OPERATING MODE", ["Lite", "Unified", "Meta"], index=1, help=mode_help)
     st.markdown("---")
@@ -91,7 +116,7 @@ with st.sidebar:
     else: st.warning("META: MASTER SYNTHESIS")
     st.caption("KLUE v5.2 / THE MASTER SOURCE")
 
-# 4. Branding
+# 4. Header
 st.markdown(f"""<div class='branding-container'><div class='logo'>KLUE</div><div class='tagline'>Unified Ai</div></div>""", unsafe_allow_html=True)
 
 # 5. API Logic
@@ -105,7 +130,7 @@ if "messages" not in st.session_state: st.session_state.messages = []
 for message in st.session_state.messages:
     with st.chat_message(message["role"]): st.markdown(message["content"])
 
-# 6. Execution
+# 6. Chat Execution
 if prompt := st.chat_input("Command the Master Source..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
