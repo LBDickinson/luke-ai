@@ -16,6 +16,7 @@ st.markdown("""
     [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
     
+    /* BACKGROUND LOCKS */
     .stApp { background-color: #131314 !important; }
     [data-testid="stSidebar"] { background-color: #1E1F20 !important; border-right: 1px solid #333333; }
 
@@ -66,14 +67,32 @@ st.markdown("""
     }
     div.stButton > button:hover { background-color: #A5D8FF !important; color: #131314 !important; }
     
-    /* LOGO */
+    /* LOGO WITH LIGHTING SHEEN EFFECT */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
-        padding: 15px 35px 20px 35px; background: linear-gradient(135deg, #8E9EAB 0%, #FFFFFF 50%, #8E9EAB 100%);
-        background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-        border: 2px solid #555 !important; border-bottom-left-radius: 45px;
+        padding: 15px 35px 20px 35px; 
+        background: linear-gradient(
+            to right, 
+            #8E9EAB 0%, 
+            #8E9EAB 40%, 
+            #A5D8FF 50%, 
+            #8E9EAB 60%, 
+            #8E9EAB 100%
+        );
+        background-size: 200% auto;
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        border: 2px solid #555 !important;
+        border-bottom-left-radius: 45px;
+        animation: sheen 4s infinite linear;
     }
+
+    @keyframes sheen {
+        0% { background-position: -100% 0; }
+        100% { background-position: 100% 0; }
+    }
+
     .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400; text-transform: uppercase; margin-top: 10px; }
 
     /* STATUS BOXES */
@@ -156,7 +175,13 @@ with st.sidebar:
     st.markdown("<div style='color:#F0F2F5; font-size:0.65rem; letter-spacing:3px; text-align:center; margin-top:10px; text-transform:uppercase;'>COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 6. BRANDING
-st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='logo-sub'>UNIFIED AI</div></div>", unsafe_allow_html=True)
+st.markdown("""
+    <div class='branding-container'>
+        <div class='logo'>KLUE</div>
+        <div class='logo-sub'>UNIFIED AI</div>
+    </div>
+    """, unsafe_allow_html=True)
+
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 
 # 7. DISPLAY
