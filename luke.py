@@ -25,7 +25,7 @@ st.markdown("""
         line-height: 1.6;
     }
 
-    /* MANIFESTO DIALOG: CHARCOAL */
+    /* MANIFESTO DIALOG: HIGH-CONTRAST CHARCOAL */
     [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
         color: #333333 !important;
         font-weight: 600;
@@ -36,7 +36,7 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR: FLEXIBLE WIDTH (Restoring Slide/Collapse Functionality) */
+    /* SIDEBAR: FLEXIBLE WIDTH */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
@@ -87,7 +87,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. SESSION STATE FOR HISTORY
+# 3. SESSION STATE
 if "messages" not in st.session_state: st.session_state.messages = []
 if "history" not in st.session_state: st.session_state.history = []
 
@@ -97,19 +97,27 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. PRO POP-UP WINDOW
+# 4. PRO POP-UP WINDOW (Restored Agreed Manifesto)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
     ### **Stop Guessing. Move with Certainty.**
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
-    
+
+    ---
+
     **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** **2. THE HALLUCINATION FIREWALL**
-    While one model might misinterpret a fact, the probability of five independent architectures telling the same lie is **astronomically low.**
+    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
     
+    > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
+
+    **2. THE HALLUCINATION FIREWALL**
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the exact same highly specific lie is **astronomically low.** > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+
     **3. PRECISION OVER SPEED**
-    Think of standard AI as a **Calculator**. Think of KLUE as the **Auditor**.
+    Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
+    
+    > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
     """)
     if st.button("Close"): st.rerun()
 
@@ -133,7 +141,7 @@ with st.sidebar:
     if st.button("📖 WHY KLUE?"):
         show_manifesto()
     
-    # RESTORED FINAL DESCRIPTIONS
+    # RESTORED FULL DESCRIPTIONS
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
         "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
