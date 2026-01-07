@@ -18,29 +18,30 @@ st.markdown("""
     
     .stApp { background-color: #131314; font-family: 'Segoe UI', sans-serif; }
     
-    /* UNIVERSAL TITANIUM WHITE (Specific to text to avoid icon white-out) */
-    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p, .stSelectbox label p {
+    /* 1. UNIVERSAL TEXT FORCE */
+    .stApp p, .stApp label, [data-testid="stMarkdownContainer"] p {
         color: #F0F2F5 !important;
     }
 
-    /* ENGINE SELECTOR TEXT FORCE (Forcing the actual value to White) */
-    div[data-baseweb="select"] div, div[data-baseweb="select"] span {
+    /* 2. ENGINE SELECTOR TEXT - TARGETING INTERNAL SPAN */
+    div[data-baseweb="select"] span, div[data-baseweb="select"] div {
         color: #F0F2F5 !important;
     }
 
-    /* MANIFESTO DIALOG CONTRAST */
-    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
-        color: #333333 !important;
+    /* 3. COLLAPSE ARROWS - FORCE WHITE */
+    [data-testid="collapsedControl"] svg {
+        fill: #F0F2F5 !important;
+        color: #F0F2F5 !important;
     }
 
-    /* SIDEBAR: FLEXIBLE + SLIDING */
+    /* 4. SIDEBAR: FLEX-BASIS FOR MANUAL RESIZE */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        width: 260px !important; /* Fixed width allows the sliding/collapse mechanism to work */
+        flex-basis: 260px !important;
     }
 
-    /* LOGO BOX - REINFORCED ALL SIDES */
+    /* 5. LOGO BOX - REINFORCED */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -56,30 +57,27 @@ st.markdown("""
         text-transform: uppercase; margin-top: 10px;
     }
 
-    /* STATUS BOXES */
+    /* 6. STATUS BOXES */
     .status-base {
         color: #A5D8FF !important; border: 1px solid #A5D8FF !important;
         padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
         text-align: center; letter-spacing: 2px; margin-top: 15px;
     }
 
-    /* ICON COLOR */
+    /* 7. HELP ICON COLOR */
     [data-testid="stWidgetLabel"] svg {
         fill: #A5D8FF !important;
         color: #A5D8FF !important;
     }
     
-    /* BUTTON STYLING (Fixed white-out) */
+    /* 8. BUTTONS */
     div.stButton > button {
         background-color: transparent !important;
         border: 1px solid #444 !important;
         color: #F0F2F5 !important;
-        width: 100%;
-        text-align: left;
     }
     div.stButton > button:hover {
         background-color: #A5D8FF !important;
-        border-color: #A5D8FF !important;
         color: #131314 !important;
     }
     </style>
@@ -95,7 +93,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO (Full Copy Verified)
+# 4. MANIFESTO (Full Verification)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.write("### **Stop Guessing. Move with Certainty.**")
