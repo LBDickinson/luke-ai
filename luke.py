@@ -25,10 +25,10 @@ st.markdown("""
         line-height: 1.6;
     }
 
-    /* MANIFESTO DIALOG: DARKER TEXT FOR READABILITY */
-    [data-testid="stDialog"] p, [data-testid="stDialog"] li {
-        color: #C1C7CD !important; /* Darker, more solid contrast */
-        font-weight: 500;
+    /* MANIFESTO DIALOG: MAXIMUM CONTRAST CHARCOAL */
+    [data-testid="stDialog"] p, [data-testid="stDialog"] li, [data-testid="stDialog"] h3 {
+        color: #333333 !important; /* High-contrast Charcoal */
+        font-weight: 600;
     }
 
     /* ICE BLUE TINT FOR KLUE HUB ICON */
@@ -36,18 +36,19 @@ st.markdown("""
         color: #A5D8FF !important;
     }
     
-    /* SIDEBAR: WIDER DEFAULT & STYLE */
+    /* SIDEBAR: TUNED WIDTH */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
-        min-width: 350px !important; /* Widened to keep help icon in line */
+        min-width: 300px !important; /* Reduced for better balance */
     }
     [data-testid="stSidebar"] h3 { color: #FFFFFF !important; letter-spacing: 2px !important; text-transform: uppercase; font-weight: 800 !important; }
 
-    /* BRIGHTER HELP ICON */
+    /* HIGH-VISIBILITY HELP ICON */
     [data-testid="stWidgetLabel"] svg {
         color: #FFFFFF !important;
-        filter: brightness(1.5);
+        filter: drop-shadow(0px 0px 5px rgba(255,255,255,0.8)) !important;
+        opacity: 1 !important;
     }
     
     /* LOGO */
