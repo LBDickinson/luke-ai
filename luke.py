@@ -10,69 +10,78 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. MASTER AESTHETIC ENGINE (High-Visibility & Material Theme)
+# 2. MASTER AESTHETIC ENGINE (The v7.2 "Titanium White" Build)
 st.markdown("""
     <style>
-    /* 1. HIDING DEFAULT OVERLAYS */
+    /* 1. INTERFACE CLEANUP */
     [data-testid="stDecoration"] {display: none;}
     [data-testid="stHeader"] {background: transparent;}
     footer {visibility: hidden;}
     
-    /* 2. GLOBAL THEME: FORCE PURE WHITE CHAT TEXT */
+    /* 2. GLOBAL THEME & TITANIUM TEXT */
     .stApp { 
         background-color: #131314; 
-        color: #FFFFFF !important; 
         font-family: 'Segoe UI', sans-serif;
     }
     
-    /* FORCE WHITE ON ALL CHAT TEXT */
+    /* TARGETING CHAT TEXT: Soft Titanium White (#F0F2F5) */
+    /* This is slightly brighter than Gemini but softer than pure white */
     [data-testid="stChatMessageContent"] p {
-        color: #FFFFFF !important;
-        font-size: 1rem;
+        color: #F0F2F5 !important;
+        font-size: 1.05rem;
         line-height: 1.6;
+        font-weight: 400;
     }
 
-    /* 3. SIDEBAR: HIGH VISIBILITY */
+    /* 3. SIDEBAR: HIGH-CONTRAST CONTROL PANEL */
     [data-testid="stSidebar"] {
         background-color: #1E1F20 !important;
         border-right: 1px solid #333333;
     }
     
-    /* FORCE SIDEBAR HEADERS TO BE BRIGHT WHITE & SPACED */
+    /* FORCE SIDEBAR LABELS TO PURE WHITE FOR VISIBILITY */
     [data-testid="stSidebar"] h3 {
         color: #FFFFFF !important;
         letter-spacing: 2px !important;
         text-transform: uppercase;
         font-size: 0.9rem !important;
+        font-weight: 800 !important;
     }
 
-    /* FORCE TOOLTIP ICON (?) TO BE WHITE */
+    /* FORCE TOOLTIP (?) ICON TO BRIGHT WHITE */
     [data-testid="stSidebar"] svg {
         fill: #FFFFFF !important;
         color: #FFFFFF !important;
+        opacity: 1 !important;
     }
     
-    /* 4. SELECTOR FIX: DARK THEME DROPDOWNS */
+    /* 4. SELECTOR MENU: DARK SURFACES */
     div[data-baseweb="select"] > div {
         background-color: #262730 !important;
         border: 1px solid #444 !important;
         color: #FFFFFF !important;
     }
-    ul[data-testid="stSelectboxVirtualList"] {
+    div[data-baseweb="popover"] {
         background-color: #262730 !important;
     }
     div[role="option"] {
+        background-color: #262730 !important;
         color: #FFFFFF !important;
     }
+    div[role="option"]:hover {
+        background-color: #3D3E47 !important;
+        color: #A5D8FF !important;
+    }
 
-    /* 5. CHAT INPUT: PURE WHITE ON CHARCOAL PILL */
+    /* 5. CHAT INPUT: INTEGRATED DARK DESIGN */
     .stChatInputContainer textarea {
         background-color: #1E1F20 !important;
-        color: #FFFFFF !important;
+        color: #F0F2F5 !important;
         border: 1px solid #555 !important;
+        border-radius: 28px !important;
     }
 
-    /* 6. LOGO: SHINING TITANIUM SHIELD */
+    /* 6. LOGO: TITANIUM SHINE ANIMATION */
     .branding-container { text-align: center; margin-bottom: 50px; padding-top: 20px; }
     .logo {
         font-size: 3.2rem; font-weight: 800; letter-spacing: 12px; display: inline-block;
@@ -81,10 +90,11 @@ st.markdown("""
         background-size: 200% auto;
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         border: 2px solid #555; border-bottom-left-radius: 45px; 
+        filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.6));
         animation: logo-shine 8s linear infinite;
     }
     @keyframes logo-shine { to { background-position: 200% center; } }
-    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; }
+    .tagline { color: #FFFFFF !important; font-size: 0.8rem; letter-spacing: 10px; margin-top: 25px; text-transform: uppercase; font-weight: 400; opacity: 0.9; }
 
     /* 7. CORE STATUS BOXES */
     .status-base {
@@ -97,8 +107,9 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. SIDEBAR: CORE SELECTION
+# 3. SIDEBAR: OPERATING CORE SELECTION
 with st.sidebar:
+    # CORE DESCRIPTORS
     core_specs = (
         "**LITE: 2 CORES**\nOptimized for rapid creative flow. Best for brainstorming and quick Q&A.\n\n"
         "**PRO: 4 CORES**\nBalanced for deep logic. Best for verified insights and complex reasoning.\n\n"
@@ -116,6 +127,7 @@ with st.sidebar:
     
     st.markdown("---")
     
+    # STATUS INDICATORS
     if selected_mode == "Lite": 
         st.markdown("<div class='status-base'>2 CORES: SPEED RESPONSE</div>", unsafe_allow_html=True)
     elif selected_mode == "Pro": 
@@ -123,24 +135,23 @@ with st.sidebar:
     else: 
         st.markdown("<div class='status-base status-meta'>5 CORES: MASTER INSIGHT</div>", unsafe_allow_html=True)
     
-    st.markdown("<br><div style='color:white; font-size:0.7rem; text-align:center;'>KLUE | COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
+    st.markdown("<br><br><div style='color:white; font-size:0.7rem; text-align:center; letter-spacing:2px; opacity:0.6;'>KLUE | COMBINED INTELLIGENCE</div>", unsafe_allow_html=True)
 
 # 4. BRANDING HEADER
 st.markdown("<div class='branding-container'><div class='logo'>KLUE</div><div class='tagline'>Unified AI</div></div>", unsafe_allow_html=True)
 
-# 5. API INITIALIZATION
+# 5. OPENROUTER CLIENT
 try:
     client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=st.secrets["OPENROUTER_API_KEY"])
 except:
-    st.error("Missing API Key.")
+    st.error("API Key Missing. Check your secrets file.")
     st.stop()
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 6. CHAT DISPLAY (Using Material Symbols)
+# 6. CHAT DISPLAY (Material Symbols: Hub & Terminal)
 for message in st.session_state.messages:
-    # Material Symbols: Hub for KLUE, Terminal for User
     avatar_icon = ":material/hub:" if message["role"] == "assistant" else ":material/terminal:"
     with st.chat_message(message["role"], avatar=avatar_icon):
         st.markdown(message["content"])
@@ -155,7 +166,7 @@ if prompt := st.chat_input("Command the Master Source..."):
         status_area = st.empty()
         status_area.markdown("`[SYSTEM: MERGING CORES...]`")
         
-        # Core Logic
+        # CORE LOGIC
         if selected_mode == "Lite":
             cores = ["openai/gpt-4o-mini", "google/gemini-flash-1.5"]
         elif selected_mode == "Pro":
@@ -166,16 +177,16 @@ if prompt := st.chat_input("Command the Master Source..."):
         core_outputs = []
         for c in cores:
             try:
-                res = client.chat.completions.create(model=c, messages=[{"role": "user", "content": prompt}], max_tokens=500)
+                res = client.chat.completions.create(model=c, messages=[{"role": "user", "content": prompt}], max_tokens=600)
                 core_outputs.append(res.choices[0].message.content)
             except: continue
 
-        # Final Synthesis
+        # MASTER SYNTHESIS
         master = client.chat.completions.create(
             model="openai/gpt-4o",
             messages=[
-                {"role": "system", "content": "You are KLUE. Provide a definitive synthesis. Pure white-label result."},
-                {"role": "user", "content": f"Data: {core_outputs}. Query: {prompt}"}
+                {"role": "system", "content": "You are KLUE. Provide a definitive synthesis. Master intelligence mode."},
+                {"role": "user", "content": f"Intelligence Data: {core_outputs}. Command: {prompt}"}
             ]
         )
         
