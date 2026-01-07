@@ -24,7 +24,8 @@ st.markdown("""
     [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] label,
     [data-testid="stSidebar"] span,
-    [data-testid="stSidebar"] .stMarkdown p {
+    [data-testid="stSidebar"] .stMarkdown p,
+    [data-testid="stWidgetLabel"] p {
         color: #F0F2F5 !important;
         opacity: 1 !important;
         -webkit-text-fill-color: #F0F2F5 !important;
@@ -39,9 +40,9 @@ st.markdown("""
         color: #F0F2F5 !important;
     }
 
-    /* MANIFESTO FIX */
+    /* MANIFESTO DIALOG FORCE (JET BLACK ON LIGHT) */
     [data-testid="stDialog"] div, [data-testid="stDialog"] p, [data-testid="stDialog"] h3, 
-    [data-testid="stDialog"] b, [data-testid="stDialog"] li {
+    [data-testid="stDialog"] b, [data-testid="stDialog"] li, [data-testid="stDialog"] blockquote {
         color: #111111 !important;
         -webkit-text-fill-color: #111111 !important;
     }
@@ -54,7 +55,7 @@ st.markdown("""
         color: #F0F2F5 !important;
     }
 
-    /* ENGINE SELECTOR */
+    /* SELECTOR BOX */
     div[data-baseweb="select"] > div { background-color: #262730 !important; border: 1px solid #444 !important; }
     div[data-baseweb="select"] * { color: #F0F2F5 !important; }
 
@@ -73,7 +74,7 @@ st.markdown("""
         background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         border: 2px solid #555 !important; border-bottom-left-radius: 45px;
     }
-    .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 10px; }
+    .logo-sub { color: #F0F2F5; font-size: 0.7rem; letter-spacing: 6px; font-weight: 400; text-transform: uppercase; margin-top: 10px; }
 
     /* STATUS BOXES */
     .status-base {
@@ -94,7 +95,7 @@ def reset_chat():
         st.session_state.history.append({"title": summary, "chat": st.session_state.messages.copy()})
     st.session_state.messages = []
 
-# 4. MANIFESTO
+# 4. MANIFESTO (FULL RESTORED VERSION)
 @st.dialog("WHY KLUE?", width="large")
 def show_manifesto():
     st.markdown("""
@@ -102,13 +103,18 @@ def show_manifesto():
     In an era where AI is fast, cheap, and **risks mistakes**, KLUE is the Audit Layer for the Modern Enterprise.
     ---
     **1. THE ENSEMBLE ARCHITECTURE**
-    **KLUE operates on an Ensemble Architecture, engaging the world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences to ensure your data is scrutinized from every angle.
+    **KLUE operates on an Ensemble Architecture, engaging the five world-leading AI engines simultaneously to cross-verify every claim.** Most AI tools are a single voice—one model with its own specific blind spots and biases. KLUE triggers a high-level "Board Meeting" between the world’s most powerful intelligences (OpenAI, Anthropic, Google, Meta, and Mistral) to ensure your data is scrutinized from every angle.
+    
     > **The Result:** You aren't betting your business on a single opinion; you are acting on a verified consensus. Instead of just getting an answer, you get **THE answer.**
+
     **2. THE HALLUCINATION FIREWALL**
-    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact, the probability of multiple independent architectures telling the same highly specific lie is **astronomically low.**
+    Single AI models are prone to "Hallucination Patterns"—confident, perfectly phrased fabrications. While one model might misinterpret a fact or risk a mistake, the probability of five independent architectures telling the same highly specific lie is **astronomically low.**
+    
     > **The Result:** This multi-core audit **dramatically reduces** your strategic risk by filtering out algorithmic guesswork to deliver absolute clarity.
+
     **3. PRECISION OVER SPEED**
-    Speed is a commodity; Accuracy is a luxury. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
+    Speed is a commodity; Accuracy is a luxury. Think of standard AI as a **Calculator**—great for routine math and daily tasks. Think of KLUE as the **Auditor**—essential for the 20% of decisions that carry 80% of your business risk. 
+    
     > **The Result:** We don't compete on milliseconds; we compete on the **integrity of the outcome.**
     """)
     if st.button("Close"): st.rerun()
@@ -166,7 +172,6 @@ if prompt := st.chat_input("Command the Master Source..."):
         st.markdown(prompt)
     with st.chat_message("assistant", avatar=":material/hub:"):
         status_area = st.empty(); status_area.markdown("`[SYSTEM: CONVENING BOARD MEETING...]`")
-        # UPDATED LITE MODE: Added Claude 3 Haiku for 3-core consensus
         modes = {"Lite": ["openai/gpt-4o-mini", "google/gemini-flash-1.5", "anthropic/claude-3-haiku"],
                  "Pro": ["openai/gpt-4o-mini", "anthropic/claude-3-haiku", "google/gemini-flash-1.5", "meta-llama/llama-3.1-8b-instruct"],
                  "Meta": ["openai/gpt-4o", "anthropic/claude-3.5-sonnet", "google/gemini-pro-1.5", "meta-llama/llama-3.1-405b", "mistralai/mistral-large"]}
